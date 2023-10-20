@@ -115,20 +115,30 @@ class LightCVAE(L.LightningModule):
         self.cvae = CVAE(input_dim, dims, z_dim, n_class)
 
     def training_step(self, batch, batch_idx):
-        return 
+        # unpacking
+        x, y = batch
+        x_res, mu, logvar = self.cvae(x, y)
+
+        loss = self.elbo(x, x_res, mu, logvar)
+        self.log("train-loss", loss, prog_bar=True)
+
+        return loss
 
     @torch.no_grad()
     def validation_step(self, batch, batch_idx):
-        return
+        x, y = batch
+        x_res, mu, logvar = self.cvae(x, y)
+
+        loss = self.elbo(x, x_res, mu, logvar)
+        self.log("valid-loss", loss, prog_bar=True)
+
+    @staticmethod
+    def elbo(x, x_res, mu, logvar):
+        # reconstruction loss
+        lR = ((x - x_res)**2).mean()
+        kL = -.5 * torch.sum(
+                1 + logvar - mu.pow(2) - logvar.exp())
+        return 0.5 * lR + 0.5 * kL
 
     def configure_optimizers():
         return torch.optim.Adam(self.parameters(), lr=1e-2)
-
-
-
-if __name__ == "__main__":
-    vae = CVAE(128, [64, 32, 16], 16, 10)
-    x = torch.randn((256, 128))
-    y = torch.randint(low=0, high=10, size=(256,))
-    x_res, mu, logvar = vae(x, y)
-
