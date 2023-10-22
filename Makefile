@@ -1,5 +1,27 @@
 dev:
-	python -m modules.data
+	python -m modules \
+		--ds_name ionosphere\
+		--clf_name decision_tree\
+		--pth logs/dev/version_1/checkpoints/epoch=99-step=2000.ckpt\
+		--encoder mlp_16_8_16\
+		--decoder mlp_16_8_16\
+		--z_dim 8\
+		--n_class 2 
+		 
+
+
+train:
+	python -m modules.train \
+		--exp_name dev\
+		--dataset ionosphere\
+		--batch_size 16\
+		--num_workers 4\
+		--input_dim 32\
+		--z_dim 8\
+		--n_class 2\
+		--val_split .1\
+		--max_epochs 100
+
 
 download: ds_init ds_download 
 
@@ -37,8 +59,3 @@ ds_download:
 		-o datasets/spectf.train
 	curl 'https://archive.ics.uci.edu/ml/machine-learning-databases/semeion/semeion.data'\
 		-o datasets/semeion.data
-
-
-
-
-

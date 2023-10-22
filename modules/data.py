@@ -6,11 +6,13 @@ import numpy as np
 
 from torch import nn
 from torch.utils.data import Dataset, DataLoader, random_split
-
 from sklearn.preprocessing import LabelEncoder
 
 
-def _build_Xy(name: str) -> Dataset:
+# seeding
+np.random.seed(1)
+
+def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
     """
     """
     if name == "ionosphere":
@@ -22,7 +24,15 @@ def _build_Xy(name: str) -> Dataset:
         le.fit(y)
         y = le.transform(y)
 
-        return X, y, le
+        # Number of samples
+        N, _ = X.shape
+
+        # Index of validation samples: 0 -> train, 1->valid
+        valid_idx = np.random.choice(2, size=N, p=[1-valsplit, valsplit])
+        X_train, y_train = X[valid_idx==0,:], y[valid_idx==0]
+        X_valid, y_valid = X[valid_idx==1,:], y[valid_idx==1]
+
+        return (X_train, y_train), (X_valid, y_valid), le
 
     else:
         raise NotImplementedError(name)
@@ -40,7 +50,7 @@ class DatasetFromNumpyArray(Dataset):
 
         x, y = self.X[idx, :], self.y[idx]
         x = torch.tensor(x, dtype=torch.float32)
-        y = torch.tensor(y, dtype=torch.int32)
+        y = torch.tensor(y, dtype=torch.int64)
 
         return x, y
 
@@ -52,32 +62,27 @@ class DatasetFromNumpyArray(Dataset):
 class DataModuleFromNumpyArray(L.LightningDataModule):
     def __init__(
             self,
-            X: np.ndarray,
-            y: np.ndarray,
-            val_split: float,
+            name: str,
+            valsplit: float,
             batch_size: int,
             num_workers: int):
 
         super().__init__()
-        self.full = DatasetFromNumpyArray(X, y)
-        self.val_split = val_split
+        self.name = name
+        self.valsplit = valsplit
         self.batch_size = batch_size
         self.num_workers = num_workers
 
-    def prepare_data(self): pass
+    def prepare_data(self):
+        (X_train, y_train), (X_valid, y_valid), le\
+                = _build_Xy(self.name, self.valsplit)
+        self.train = DatasetFromNumpyArray(X_train, y_train)
+        self.valid = DatasetFromNumpyArray(X_valid, y_valid)
+        self.le = le # label encoder
+
 
     def setup(self, stage: str):
-        if stage == "fit":
-            N = len(self.full)
-            Nv = int(self.val_split * N) 
-            self.train, self.valid = random_split(
-                    self.full, [N - Nv, Nv])
-
-        if stage == "test":
-            raise NotImplementedError()
-
-        if stage == "predict":
-            raise NotImplementedError()
+        pass
 
     def train_dataloader(self):
         return DataLoader(
@@ -86,7 +91,7 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
                 shuffle=True,
                 num_workers=self.num_workers)
 
-    def valid_dataloader(self):
+    def val_dataloader(self):
         return DataLoader(
                 self.valid,
                 batch_size=self.batch_size,
@@ -98,22 +103,16 @@ def build_datamodules(
         val_split: float,
         batch_size: int,
         num_workers: int) -> L.LightningDataModule:
-    X, y, le = _build_Xy(name)
+
     return DataModuleFromNumpyArray(
-            X, y, val_split, batch_size, num_workers), le
-
-
+            name, val_split, batch_size, num_workers)
 
 
 if __name__ == "__main__":
-    dm, le = build_datamodules("ionosphere", .2, 16, 4)
-    dm.prepare_data()
-    dm.setup("fit")
+    _build_Xy("ionosphere")
+    # dm, le = build_datamodules("ionosphere", .2, 16, 4)
+    # dm.prepare_data()
+    # dm.setup("fit")
 
-    for (x, y) in dm.train_dataloader():
-        print(x.shape, y.shape); break
-
-
-
-
-
+    # for (x, y) in dm.train_dataloader():
+    #     print(x.shape, y.shape); break

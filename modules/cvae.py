@@ -1,60 +1,35 @@
 import lightning as L
-import torch
 
+import torch
 from torch import nn
 from torch.nn import functional as F
 from torchsummary import summary
 
-class Dense(nn.Module):
-    def __init__(self, input_dim: int, hidden_dim: int, act: str):
-        super().__init__()
-        
-        if act == "sigmoid":
-            act = nn.Sigmoid() 
-
-        elif act == "relu":
-            act = nn.ReLU()
-
-        elif act == "leaky_relu":
-            act = nn.LeakyReLU()
-        
-        elif act == "tanh":
-            act = nn.Tanh()
-        
-        else:
-            NotImplementedError(act)
-
-        self.seq = nn.Sequential(
-                nn.Linear(input_dim, hidden_dim),
-                act)
-
-    def forward(self, x):
-        return self.seq(x)
-
+from modules.net import build_mlp
+from modules.net import Dense
 
 
 class Encoder(nn.Module):
     """
     MLP encoder 
     """
-    def __init__(self, input_dim: int, dims: list[int], z_dim: int):
+    def __init__(self, input_dim: int, mlp_name: str, z_dim: int):
         super().__init__()
 
-        seqs = []
-        seqs.append(Dense(input_dim, dims[0], 'relu'))
-        
-        for i in range(0, len(dims)-1):
-            seqs.append(Dense(dims[i], dims[i+1], 'relu'))
+        if mlp_name == "mlp_16_8_16":
+            from modules.net import mlp_16_8_16
+            self.mlp = mlp_16_8_16(input_dim)
 
-        #seqs.append(Dense(dims[-1], z_dim, 'relu'))
-        self.seqs = nn.Sequential(*seqs)
+        else:
+            raise NotImplementedError(mlp_name)
 
-        self.mu = Dense(dims[-1], z_dim, 'tanh')
-        self.logvar= Dense(dims[-1], z_dim, 'tanh')
+        # Dense layer return mu & logvar
+        self.mu = Dense(16, z_dim, 'tanh')
+        self.logvar= Dense(16, z_dim, 'tanh')
 
 
     def forward(self, x):
-        z = self.seqs(x)
+        z = self.mlp(x)
         mu, logvar = self.mu(z), self.logvar(z)
 
         return mu, logvar
@@ -62,34 +37,38 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     """
-    MLP encoder 
+    MLP decoder 
     """
-    def __init__(self, z_dim: int, dims: list[int], output_dims: int):
+    def __init__(self, z_dim: int, mlp_name, output_dim: int, n_class :int):
         super().__init__()
 
-        seqs = []
-        seqs.append(Dense(z_dim, dims[0], 'relu'))
+        self.n_class=n_class
         
-        for i in range(0, len(dims)-1):
-            seqs.append(Dense(dims[i], dims[i+1], 'relu'))
+        if mlp_name == "mlp_16_8_16":
+            from modules.net import mlp_16_8_16
+            self.mlp = mlp_16_8_16(z_dim + n_class)
+        
+        else:
+            raise NotImplementedError(mlp_name)
 
-        seqs.append(Dense(dims[-1], output_dims, 'relu'))
-        self.seqs = nn.Sequential(*seqs)
+        self.out = Dense(16, output_dim, 'tanh')
 
-    def forward(self, x):
-        return self.seqs(x)
+
+    def forward(self, z, y):
+        return self.out(self.mlp(torch.concat([z, y], -1)))
 
 
 class CVAE(nn.Module):
     def __init__(
             self,
             input_dim: int,
-            dims: list[int],
+            encoder: str,
+            decoder: str,
             z_dim: int,
             n_class: int):
         super().__init__()
-        self.encoder = Encoder(input_dim + n_class, dims, z_dim)
-        self.decoder = Decoder(z_dim, dims[::-1], input_dim)
+        self.encoder = Encoder(input_dim + n_class, encoder, z_dim)
+        self.decoder = Decoder(z_dim, decoder, input_dim, n_class)
         self.n_class = n_class
 
 
@@ -100,7 +79,7 @@ class CVAE(nn.Module):
         epsilon = torch.randn(mu.size()).type_as(x)
 
         z = mu + epsilon * torch.exp(logvar)
-        x_res = self.decoder(z)
+        x_res = self.decoder(z, y)
 
         return x_res, mu, logvar 
 
@@ -108,11 +87,13 @@ class CVAE(nn.Module):
 class LightCVAE(L.LightningModule):
     def __init__(self,
                  input_dim: int,
-                 dims: list[int],
+                 encoder: str,
+                 decoder: str,
                  z_dim: int,
                  n_class: int):
         super().__init__()
-        self.cvae = CVAE(input_dim, dims, z_dim, n_class)
+        self.save_hyperparameters()
+        self.cvae = CVAE(input_dim, encoder, decoder, z_dim, n_class)
 
     def training_step(self, batch, batch_idx):
         # unpacking
@@ -140,5 +121,5 @@ class LightCVAE(L.LightningModule):
                 1 + logvar - mu.pow(2) - logvar.exp())
         return 0.5 * lR + 0.5 * kL
 
-    def configure_optimizers():
-        return torch.optim.Adam(self.parameters(), lr=1e-2)
+    def configure_optimizers(self):
+        return torch.optim.Adam(self.parameters(), lr=1e-4)

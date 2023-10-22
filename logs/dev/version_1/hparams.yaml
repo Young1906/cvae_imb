@@ -1,0 +1,5 @@
+decoder: mlp_16_8_16
+encoder: mlp_16_8_16
+input_dim: 32
+n_class: 2
+z_dim: 8

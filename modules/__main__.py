@@ -1,33 +1,86 @@
+from collections import Counter
+
 import click
-import lightning as L
+import numpy as np
+import torch
+from sklearn.metrics import f1_score, classification_report
 
-from modules.cvae import LightCVAE
-from modules.data import build_datamodules
-
+from modules.clf import build_classifier
+from modules.data import _build_Xy
+from modules.generate import generate
+from modules.generate import load_decoder
 
 @click.command()
-@click.option("--exp_name", "-N", type=str, help="Name of the experiment")
-@click.option("--dataset", "-D", type=str, help="Name of the dataset")
-@click.option("--batch_size", "-B", type=int, help="Batch size")
-@click.option("--num_workers", "-W", type=int, help="Num workers")
+@click.option(
+        "--ds_name", "-N", type=str, help="Name of the encoder")
+@click.option(
+        "--clf_name", "-F", type=str, help="SKLearn classifier")
+@click.option(
+        "--pth", "-P", type=str, help="Path to checkpoint")
+@click.option(
+        "--encoder", "-E", type=str, help="Name of the encoder")
+@click.option(
+        "--decoder", "-D", type=str, help="Name of the decoder")
+@click.option(
+        "--z_dim", "-Z", type=int, help="Latent dim")
+@click.option(
+        "--n_class", "-C", type=int, help="N classes")
 
-@click.option("--input_dim", "-I", type=int, help="Dimension of Input") 
-@click.option("--dims", "-D", type=int, help="Dimension of Input") 
-@click.option("--z_dim", "-Z", type=int, help="Dimension of latent variable") 
-@click.option("--n_class", "-Z", type=int, help="Number of classes") 
 def main(
-        exp: str, 
-        dataset: str,
-        batch_size: int,
-        num_workers: int,
-        z_dims: int):
+        ds_name: str,
+        clf_name: str,
+        pth:str,
+        encoder: str,
+        decoder: str,
+        z_dim: int,
+        n_class: int):
+    """
+    """
+    # dataset
+    (X_train, y_train), (X_valid, y_valid), le =\
+            _build_Xy(ds_name)
 
-    # build data modules
-    dm, le = build_datamodules(dataset, val_split, batch_size, num_workers)
+    # baseline model
+    clf = build_classifier(clf_name)
+    clf.fit(X_train, y_train)
 
-    # model
-    cvae = LightCVAE()
-    return
+    y_pred = clf.predict(X_valid)
+    print("Baseline", f1_score(y_valid, y_pred, average='weighted'))
 
+    # generate new sample to train
+    decoder = load_decoder(pth, 32, encoder, decoder, z_dim, n_class)
+
+    #counter: number of sample per classes
+    counter = Counter(y_train)
+    _max = np.max(list(counter.values()))
+
+    to_generate = []
+    for (c, n) in counter.items():
+        n_samples = _max - n
+
+        if n_samples:
+            to_generate.append((c, n_samples))
+
+    X_syn, y_syn = [], []
+    for (c, n) in to_generate:
+        _y = torch.ones(n, dtype=torch.int64) * c
+        samples = generate(decoder, n, z_dim, _y, n_class)
+        _y = _y.detach().cpu().numpy()
+
+        X_syn.append(samples)
+        y_syn.append(_y)
+
+    X_train_syn, y_train_syn = \
+            np.concatenate([X_train, *X_syn], axis=0),\
+            np.concatenate([y_train, *y_syn])
+
+    # baseline model
+    clf = build_classifier(clf_name)
+    clf.fit(X_train_syn, y_train_syn)
+
+    y_pred = clf.predict(X_valid)
+    print("CVAE    ", f1_score(y_valid, y_pred, average='weighted'))
+    
+
+    
 if __name__ == "__main__": main()
-
