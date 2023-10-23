@@ -137,4 +137,4 @@ class LightCVAE(L.LightningModule):
         return 0.5 * lR + 0.5 * kL
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=1e-3)
+        return torch.optim.Adam(self.parameters())

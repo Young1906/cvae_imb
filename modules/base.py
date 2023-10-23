@@ -43,4 +43,13 @@ class OverSamplingConfig(BaseModel):
     z_dim: int 
     n_class: int
 
-    f1_score_avg: str
+    # evaluation metrics
+    score_avg_method: str
+
+    # Pth to result file
+    result_pth: str
+
+
+class LoggerConfig(BaseModel):
+    logger_name: str
+    logger_dir: str

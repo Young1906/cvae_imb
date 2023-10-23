@@ -1,3 +1,4 @@
+import datetime
 from collections import Counter
 
 import click
@@ -8,11 +9,14 @@ import yaml
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score
 
+from modules.base import LoggerConfig
 from modules.base import OverSamplingConfig
 from modules.cvae.clf import build_classifier
 from modules.cvae.data import _build_Xy
 from modules.cvae.generate import generate
 from modules.cvae.generate import load_decoder
+from modules.eval import evaluate
+from modules.logger import build_logger
 
 L.seed_everything(1, workers=True)
 
@@ -21,15 +25,29 @@ L.seed_everything(1, workers=True)
 def main(config: str):
     """
     """
+    config_pth = config
 
     with open(config, "r") as f:
         config = yaml.safe_load(f)
 
     os_config = OverSamplingConfig(**config['oversampling'])
 
+    # Logger
+    logger_config = LoggerConfig(**config['logger'])
+    logger = build_logger(
+            logger_config.logger_name,
+            logger_config.logger_dir)
+
+    # logging config
+    logger.info("-------------------------------------------------------")
+    logger.info("<START>")
+    logger.info(config)
+
     # dataset
     (X_train, y_train), (X_valid, y_valid), le =\
             _build_Xy(os_config.dataset)
+
+    (N, _), (N_val, _) = X_train.shape, X_valid.shape
 
     # generate new sample to train
     pth = f"{os_config.checkpoint_pth}/{os_config.checkpoint_fn}.ckpt"
@@ -69,18 +87,24 @@ def main(config: str):
             np.concatenate([X_train, *X_syn], axis=0),\
             np.concatenate([y_train, *y_syn])
 
-    # baseline model
+    # train classifier 
     clf = build_classifier(os_config.classifier)
     clf.fit(X_train_syn, y_train_syn)
 
+    # Evaluation
     y_pred = clf.predict(X_valid)
-    print("CVAE: ",
-          f1_score
 
-              y_valid,
-              y_pred,
-              average=os_config.f1_score_avg))
-    
+    p, r, f= evaluate(y_valid, y_pred, os_config.score_avg_method)
+
+    # Logging result
+    logger.info(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
+    logger.info("<END>")
+
+    # Logging to result
+    with open(os_config.result_pth, "a") as fn:
+        t = datetime.datetime.now()
+        fn.write(f"{t},{config_pth},{p:.5f},{r:.5f},{f:.5f}\n")
+
 
     
 if __name__ == "__main__": main()
