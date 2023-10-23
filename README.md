@@ -7,19 +7,28 @@ Generating minority class oversampling using conditional VAE
 ### Dataset
 
 - [ ] Breast Cancer
-- [ ] Frogs MFCCs
-- [ ] Breast Tissue
+- [x] Frogs MFCCs
+- [x] Breast Tissue
 - [ ] Connectionist BenchMark
-- [ ] Ionosphere
+- [x] Ionosphere
 - [ ] Parkinsons
 - [ ] Heart Training Subset
 - [ ] Balance
 
+Other (not included in Hoang's repo)
+
+- [x] Ecoli
+
 ### Classifier
 
-- [ ] SMV
-- [ ] Logistic Regression
+- [x] SMV
+- [x] Logistic Regression
 - [ ] MLP
+
+Other (not included in Hoang's repo)
+
+- [x] KNN
+- [x] Decision Tree
 
 
 ## [IMPORTANT] Experiment procedure
