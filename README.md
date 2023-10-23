@@ -5,10 +5,10 @@ Minority class oversampling using conditional VAE
 
 | Dataset | CVAE F1 | Best Baseline |
 | --- | --- | --- |
-| Breast Tissue | 60.072% | 59.6186 (KMean Smote) | 
-| Frogs MFCCs | 98.871% | 99.0373% (ADASYN) | 
-| Heart 2CL | 92.308% | 79.6326% (KMean Smote) | 
-| Ionosphere | 94.737% | 94.082% (ADASYN) | 
+| Breast Tissue | **60.072%** | 59.6186 (KMean Smote) | 
+| Frogs MFCCs | 98.871% | **99.0373%** (ADASYN) | 
+| Heart 2CL | **92.308%** | 79.6326% (KMean Smote) | 
+| Ionosphere | **94.737%** | 94.082% (ADASYN) | 
 
 ## Checklist
 
