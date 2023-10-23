@@ -1,11 +1,11 @@
 dataset:
-  name: ionosphere
+  name: ecoli 
   batch_size: 4
-  num_workers: 6
+  num_workers: 1
   val_split: 0.2
 
 model:
-  input_dim: 32
+  input_dim: 7
   encoder: 
     - [16, 'relu']
     - [8, 'relu']
@@ -18,21 +18,21 @@ model:
   n_class: 2
 
 training:
-  exp_name: dev
+  exp_name: ecoli 
   max_epochs: 100
-  checkpoint_pth: checkpoints/dev 
-  checkpoint_fn: ionosphere
+  checkpoint_pth: checkpoints/ecoli
+  checkpoint_fn: ecoli 
   checkpoint_monitor: valid-loss 
 
 
 oversampling:
-  dataset: ionosphere
+  dataset: ecoli 
   classifier: lr 
 
   # cvae params 
-  checkpoint_pth: checkpoints/dev 
-  checkpoint_fn: ionosphere-v2
-  input_dim: 32
+  checkpoint_pth: checkpoints/ecoli
+  checkpoint_fn: ecoli
+  input_dim: 7
   encoder: 
     - [16, 'relu']
     - [8, 'relu']
@@ -45,11 +45,11 @@ oversampling:
   n_class: 2
 
   # evaluation metrics
-  score_avg_method: binary
+  score_avg_method: binary 
 
   # Path to result file
-  result_pth: results/dev.csv
+  result_pth: results/ecoli.csv
 
 logger:
-  logger_name: dev
+  logger_name: ecoli 
   logger_dir: .log

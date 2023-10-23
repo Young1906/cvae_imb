@@ -12,37 +12,72 @@ from sklearn.model_selection import train_test_split
 # seeding
 np.random.seed(1)
 
+
+def _build_Xy_ionosphere():
+    df = pd.read_csv("datasets/ionosphere.data", header=None)
+    X, y = df.iloc[:, 2:-1], df.iloc[:, -1]
+    X, y = np.array(X), np.array(y)
+
+    le = LabelEncoder()
+    le.fit(y)
+    y = le.transform(y)
+
+    return X, y, le
+
+def _build_Xy_ecoli():
+    df = pd.read_csv("datasets/ecoli.data", header=None, sep="\s+")
+    X, y = df.iloc[:, 1:-1].values, df.iloc[:, -1].values
+    X, y = np.array(X), np.array(y)
+
+    le = LabelEncoder()
+    le.fit(y)
+    y = le.transform(y)
+
+    # Create imbalance dataset
+    y = (y > 4) * 1
+
+    return X, y, le
+
+
+def _build_Xy_frog():
+    df = pd.read_csv("datasets/Frogs_MFCCs.csv")
+
+    X = df.iloc[:, :22].values
+    y = df.iloc[:, 22].values
+
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    # Convert to binary problem
+    y = (y == 3) * 1
+
+    return X, y, le
+
+
+
 def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
     """
     """
     if name == "ionosphere":
-        df = pd.read_csv("datasets/ionosphere.data", header=None)
-        X, y = df.iloc[:, 2:-1], df.iloc[:, -1]
-        X, y = np.array(X), np.array(y)
+        X, y, le = _build_Xy_ionosphere()
 
-        le = LabelEncoder()
-        le.fit(y)
-        y = le.transform(y)
+    elif name == "ecoli":
+        X, y, le = _build_Xy_ecoli()
 
-        # Number of samples
-        N, _ = X.shape
-
-        # Index of validation samples: 0 -> train, 1->valid
-        # valid_idx = np.random.choice(2, size=N, p=[1-valsplit, valsplit])
-        # X_train, y_train = X[valid_idx==0,:], y[valid_idx==0]
-        # X_valid, y_valid = X[valid_idx==1,:], y[valid_idx==1]
-        (X_train, X_valid, y_train, y_valid) =\
-                train_test_split(
-                        X, y, 
-                        test_size=valsplit,
-                        random_state=1,
-                        stratify=y)
-
-        return (X_train, y_train), (X_valid, y_valid), le
+    elif name == "frogs":
+        X, y, le = _build_Xy_frog()
 
     else:
         raise NotImplementedError(name)
 
+    (X_train, X_valid, y_train, y_valid) =\
+            train_test_split(
+                    X, y, 
+                    test_size=valsplit,
+                    random_state=1,
+                    stratify=y)
+
+    return (X_train, y_train), (X_valid, y_valid), le
 
 class DatasetFromNumpyArray(Dataset):
     def __init__(self, X, y):

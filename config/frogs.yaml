@@ -1,11 +1,11 @@
 dataset:
-  name: ionosphere
-  batch_size: 4
+  name: frogs
+  batch_size: 64
   num_workers: 6
   val_split: 0.2
 
 model:
-  input_dim: 32
+  input_dim: 22
   encoder: 
     - [16, 'relu']
     - [8, 'relu']
@@ -18,21 +18,21 @@ model:
   n_class: 2
 
 training:
-  exp_name: dev
+  exp_name: frogs 
   max_epochs: 100
-  checkpoint_pth: checkpoints/dev 
-  checkpoint_fn: ionosphere
+  checkpoint_pth: checkpoints/frogs
+  checkpoint_fn: frogs 
   checkpoint_monitor: valid-loss 
 
 
 oversampling:
-  dataset: ionosphere
-  classifier: lr 
+  dataset: frogs 
+  classifier: svm 
 
   # cvae params 
-  checkpoint_pth: checkpoints/dev 
-  checkpoint_fn: ionosphere-v2
-  input_dim: 32
+  checkpoint_pth: checkpoints/frogs
+  checkpoint_fn: frogs
+  input_dim: 22
   encoder: 
     - [16, 'relu']
     - [8, 'relu']
@@ -45,11 +45,11 @@ oversampling:
   n_class: 2
 
   # evaluation metrics
-  score_avg_method: binary
+  score_avg_method: binary 
 
   # Path to result file
-  result_pth: results/dev.csv
+  result_pth: results/ecoli.csv
 
 logger:
-  logger_name: dev
+  logger_name: frogs 
   logger_dir: .log

@@ -1,3 +1,20 @@
+frogs : train_frogs infer_frogs
+
+train_frogs:
+	python -m modules.cvae.train --config config/frogs.yaml
+
+infer_frogs:
+	python -m modules.cvae --config config/frogs.yaml
+
+
+ecoli: train_ecoli infer_ecoli
+
+train_ecoli:
+	python -m modules.cvae.train --config config/ecoli.yaml
+
+infer_ecoli:
+	python -m modules.cvae --config config/ecoli.yaml
+
 dev:
 	python -m modules.cvae \
 		--ds_name ionosphere\
