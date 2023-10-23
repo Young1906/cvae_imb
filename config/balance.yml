@@ -1,0 +1,55 @@
+dataset:
+  name: balance 
+  batch_size: 8
+  num_workers: 4
+  val_split: 0.2
+
+model:
+  input_dim: 4
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 3
+
+training:
+  exp_name: balance 
+  max_epochs: 100
+  checkpoint_pth: checkpoints/balance
+  checkpoint_fn: balance 
+  checkpoint_monitor: valid-loss 
+
+
+oversampling:
+  dataset: balance 
+  classifier: svm 
+
+  # cvae params 
+  checkpoint_pth: checkpoints/balance
+  checkpoint_fn: balance 
+  input_dim: 4
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 3
+
+  # evaluation metrics
+  score_avg_method: weighted 
+
+  # Path to result file
+  result_pth: results/balance.csv
+
+logger:
+  logger_name: balance 
+  logger_dir: .log

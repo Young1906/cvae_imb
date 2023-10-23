@@ -9,19 +9,24 @@ Minority class oversampling using conditional VAE
 | Frogs MFCCs | 98.871% | **99.0373%** (ADASYN) | 
 | Heart 2CL | **92.308%** | 79.6326% (KMean Smote) | 
 | Ionosphere | **94.737%** | 94.082% (ADASYN) | 
+| Breast Cancer | 95.238%| | 
+| Connectionist | 80.000%| | 
+| Parkinsons |92.063% | | 
+| Balance |89.619% | | 
+
 
 ## Checklist
 
 ### Dataset
 
-- [ ] Breast Cancer
+- [x] Breast Cancer
 - [x] Frogs MFCCs
 - [x] Breast Tissue
-- [ ] Connectionist BenchMark
+- [x] Connectionist BenchMark
 - [x] Ionosphere
-- [ ] Parkinsons
-- [ ] Heart Training Subset
-- [ ] Balance
+- [x] Parkinsons
+- [ ] Heart Training Subset ( Heart2CL? )
+- [x] Balance
 
 Other (not included in Hoang's repo)
 
@@ -73,3 +78,8 @@ For sample of config file, see `config/dev.yaml`
 
 ```bibtex
 ```
+
+## Resource
+
+- [Notebook](https://colab.research.google.com/drive/1zm-V7dIAE5F61NxAcNASD9WBR1YzJXcv?usp=sharing#scrollTo=pvXSYmgVoP9D) handling dataset
+- [Hoang's repo](https://github.com/Cavan1Ed1s0n/MissingData/)

@@ -1,6 +1,46 @@
 # run all experiment
 all: heart_2cl breast-tissue frogs ecoli
 
+# Breast cancer dataset
+# --------------------------------------------------
+breast_cancer: train_breast_cancer infer_breast_cancer
+
+train_breast_cancer:
+	python -m modules.cvae.train --config config/breast_cancer.yml
+
+infer_breast_cancer:
+	python -m modules.cvae --config config/breast_cancer.yml
+
+# Balance dataset
+# --------------------------------------------------
+balance: train_balance infer_balance
+
+train_balance:
+	python -m modules.cvae.train --config config/balance.yml
+
+infer_balance:
+	python -m modules.cvae --config config/balance.yml
+
+# Parkinsons dataset
+# --------------------------------------------------
+parkinsons: train_parkinsons infer_parkinsons
+
+train_parkinsons:
+	python -m modules.cvae.train --config config/parkinsons.yml
+
+infer_parkinsons:
+	python -m modules.cvae --config config/parkinsons.yml
+
+# Connectionist dataset
+# --------------------------------------------------
+connectionist: train_connectionist infer_connectionist
+
+train_connectionist:
+	python -m modules.cvae.train --config config/connectionist.yml
+
+infer_connectionist:
+	python -m modules.cvae --config config/connectionist.yml
+
 # Breast Tissue dataset
 # --------------------------------------------------
 ionosphere: train_ionosphere infer_ionosphere
@@ -89,5 +129,9 @@ ds_download:
 		-o datasets/parkinsons.data
 	curl 'https://archive.ics.uci.edu/ml/machine-learning-databases/spect/SPECTF.train'\
 		-o datasets/spectf.train
+	curl 'https://archive.ics.uci.edu/ml/machine-learning-databases/spect/SPECTF.test'\
+		-o datasets/spectf.test
 	curl 'https://archive.ics.uci.edu/ml/machine-learning-databases/semeion/semeion.data'\
 		-o datasets/semeion.data
+	curl 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data'\
+		-o datasets/wdbc.data

@@ -1,0 +1,55 @@
+dataset:
+  name: connectionist 
+  batch_size: 16
+  num_workers: 4
+  val_split: 0.2
+
+model:
+  input_dim: 60
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 2
+
+training:
+  exp_name: connectionist 
+  max_epochs: 100
+  checkpoint_pth: checkpoints/connectionist
+  checkpoint_fn: connectionist 
+  checkpoint_monitor: valid-loss 
+
+
+oversampling:
+  dataset: connectionist 
+  classifier: svm 
+
+  # cvae params 
+  checkpoint_pth: checkpoints/connectionist
+  checkpoint_fn: connectionist 
+  input_dim: 60
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 2
+
+  # evaluation metrics
+  score_avg_method: binary
+
+  # Path to result file
+  result_pth: results/connectionist.csv
+
+logger:
+  logger_name: connectionist 
+  logger_dir: .log

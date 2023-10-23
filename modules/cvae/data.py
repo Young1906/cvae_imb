@@ -9,6 +9,8 @@ from torch.utils.data import Dataset, DataLoader, random_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 
+from collections import Counter
+
 # seeding
 np.random.seed(1)
 
@@ -86,6 +88,60 @@ def _build_Xy_heart_2cl():
     return X, y, le
 
 
+def _build_Xy_connectionist():
+    df = pd.read_csv("datasets/sonar.all-data",
+                     header=None, sep=",")
+    X, y = df.iloc[:,:-1].values, df.iloc[:, -1].values
+    X, y = np.array(X), np.array(y)
+
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    return X, y, le
+
+def _build_Xy_parkinsons():
+    df = pd.read_csv("datasets/parkinsons.data",
+                     sep=",")
+    df.drop(['name'], axis = 1, inplace=True)
+    X, y = df.drop(['status'], axis = 1), df['status']
+    X, y = X.values, y.values
+
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    return X, y, le
+
+def _build_Xy_balance():
+    df = pd.read_csv("datasets/balance_3cl.csv", header=None, sep=",")
+    X, y = df.iloc[:, 1:].values, df.iloc[:, 0].values
+    X, y = np.array(X), np.array(y)
+
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    return X, y, le
+
+def _build_Xy_breast_cancer():
+    df = pd.read_csv("datasets/wdbc.data", header=None, sep=",")
+    X, y = df.iloc[:, 2:].values, df.iloc[:, 1].values
+    
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    return X, y, le
+
 
 def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
     """
@@ -104,6 +160,18 @@ def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
 
     elif name == "heart_2cl":
         X, y, le = _build_Xy_heart_2cl()
+
+    elif name == "connectionist":
+        X, y, le = _build_Xy_connectionist()
+
+    elif name == "parkinsons":
+        X, y, le = _build_Xy_parkinsons()
+
+    elif name == "balance":
+        X, y, le = _build_Xy_balance()
+
+    elif name == "breast-cancer":
+        X, y, le = _build_Xy_breast_cancer()
 
     else:
         raise NotImplementedError(name)
@@ -190,10 +258,7 @@ def build_datamodules(
 
 
 if __name__ == "__main__":
-    _build_Xy("ionosphere")
-    # dm, le = build_datamodules("ionosphere", .2, 16, 4)
-    # dm.prepare_data()
-    # dm.setup("fit")
+    X, y, le = _build_Xy_breast_cancer()
 
-    # for (x, y) in dm.train_dataloader():
-    #     print(x.shape, y.shape); break
+    print(Counter(y))
+    print(X.shape)
