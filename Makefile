@@ -1,6 +1,15 @@
 # run all experiment
 all: heart_2cl breast-tissue frogs ecoli
 
+# Breast Tissue dataset
+# --------------------------------------------------
+ionosphere: train_ionosphere infer_ionosphere
+
+train_ionosphere:
+	python -m modules.cvae.train --config config/ionosphere.yml
+
+infer_ionosphere:
+	python -m modules.cvae --config config/ionosphere.yml
 
 # Breast Tissue dataset
 # --------------------------------------------------
