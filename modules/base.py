@@ -42,3 +42,5 @@ class OverSamplingConfig(BaseModel):
     decoder: list[Layer]
     z_dim: int 
     n_class: int
+
+    f1_score_avg: str

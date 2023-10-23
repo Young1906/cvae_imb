@@ -28,7 +28,7 @@ def load_decoder(pth: str,
 def generate(decoder, n_samples, z_dim, y, n_class):
     y = F.one_hot(y, num_classes=n_class)
     z = torch.randn(size=[n_samples, z_dim])
-    samples = decoder(z, y)
+    samples = decoder(torch.concat([z, y], -1))
     return samples.detach().cpu().numpy()
 
 

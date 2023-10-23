@@ -43,3 +43,6 @@ oversampling:
     - [16, 'relu']
   z_dim: 8
   n_class: 2
+
+  # evaluation metrics
+  f1_score_avg: binary

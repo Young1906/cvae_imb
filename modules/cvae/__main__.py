@@ -25,29 +25,25 @@ def main(config: str):
     with open(config, "r") as f:
         config = yaml.safe_load(f)
 
-    oversampling_config = OverSamplingConfig(**config['oversampling'])
-    print(oversampling_config)
-    return
+    os_config = OverSamplingConfig(**config['oversampling'])
 
     # dataset
     (X_train, y_train), (X_valid, y_valid), le =\
-            _build_Xy(ds_name)
-
-    # baseline model
-    clf = build_classifier(clf_name)
-    clf.fit(X_train, y_train)
-
-    y_pred = clf.predict(X_valid)
-    print("Baseline", f1_score(y_valid, y_pred, average='weighted'))
+            _build_Xy(os_config.dataset)
 
     # generate new sample to train
-    decoder = load_decoder(pth, 32, encoder, decoder, z_dim, n_class)
-
-    #counter: number of sample per classes
-    counter = Counter(y_train)
-    _max = np.max(list(counter.values()))
+    pth = f"{os_config.checkpoint_pth}/{os_config.checkpoint_fn}.ckpt"
+    decoder = load_decoder(
+            pth=pth,
+            input_dim=os_config.input_dim,
+            encoder=os_config.encoder,
+            decoder=os_config.decoder,
+            z_dim=os_config.z_dim,
+            n_class=os_config.n_class)
 
     to_generate = []
+    counter = Counter(y_train)
+    _max = np.max(list(counter.values()))
     for (c, n) in counter.items():
         n_samples = _max - n
 
@@ -57,7 +53,13 @@ def main(config: str):
     X_syn, y_syn = [], []
     for (c, n) in to_generate:
         _y = torch.ones(n, dtype=torch.int64) * c
-        samples = generate(decoder, n, z_dim, _y, n_class)
+        samples = generate(
+                decoder,
+                n,
+                os_config.z_dim, 
+                _y, 
+                os_config.n_class)
+
         _y = _y.detach().cpu().numpy()
 
         X_syn.append(samples)
@@ -68,11 +70,15 @@ def main(config: str):
             np.concatenate([y_train, *y_syn])
 
     # baseline model
-    clf = build_classifier(clf_name)
+    clf = build_classifier(os_config.classifier)
     clf.fit(X_train_syn, y_train_syn)
 
     y_pred = clf.predict(X_valid)
-    print("CVAE    ", f1_score(y_valid, y_pred, average='weighted'))
+    print("CVAE: ",
+          f1_score(
+              y_valid,
+              y_pred,
+              average=os_config.f1_score_avg))
     
 
     
