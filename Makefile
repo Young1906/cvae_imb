@@ -1,3 +1,15 @@
+# Breast Tissue dataset
+# --------------------------------------------------
+heart_2cl: train_heart_2cl infer_heart_2cl
+
+train_heart_2cl:
+	python -m modules.cvae.train --config config/heart_2cl.yml
+
+infer_heart_2cl:
+	python -m modules.cvae --config config/heart_2cl.yml
+
+# Breast Tissue dataset
+# --------------------------------------------------
 breast-tissue: train_breast_tissue infer_breast_tissue
 
 train_breast_tissue:
@@ -7,6 +19,7 @@ infer_breast_tissue:
 	python -m modules.cvae --config config/breast-tissue.yml
 
 # Frog exp
+# --------------------------------------------------
 frogs : train_frogs infer_frogs
 
 train_frogs:
@@ -17,6 +30,7 @@ infer_frogs:
 
 
 # Ecoli exp
+# --------------------------------------------------
 ecoli: train_ecoli infer_ecoli
 
 train_ecoli:
@@ -25,19 +39,6 @@ train_ecoli:
 infer_ecoli:
 	python -m modules.cvae --config config/ecoli.yaml
 
-# DEV 
-dev:
-	python -m modules.cvae \
-		--ds_name ionosphere\
-		--clf_name knn\
-		--pth logs/dev/version_0/checkpoints/epoch=99-step=2000.ckpt\
-		--encoder mlp_16_8_16\
-		--decoder mlp_16_8_16\
-		--z_dim 8\
-		--n_class 2 
-		 
-train:
-	python -m modules.cvae.train --config config/dev.yaml
 
 # DOWNLOAD DATASET 
 download: ds_init ds_download 

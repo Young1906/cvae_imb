@@ -68,6 +68,25 @@ def _build_Xy_breast_tissue():
     return X, y, le
 
 
+def _build_Xy_heart_2cl():
+    URL = 'datasets/spectf.train'
+    URL_ = 'datasets/spectf.test'
+    train = pd.read_csv(URL, header = None, sep=',')
+    valid = pd.read_csv(URL_, header=None, sep = ',') 
+
+    df = pd.concat([train, valid])
+    X, y = df.iloc[:, 1:].values, df.iloc[:, 0].values
+    X, y = np.array(X), np.array(y)
+    
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+    return X, y, le
+
+
+
 def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
     """
     """
@@ -82,6 +101,9 @@ def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
 
     elif name == "breast-tissue":
         X, y, le = _build_Xy_breast_tissue()
+
+    elif name == "heart_2cl":
+        X, y, le = _build_Xy_heart_2cl()
 
     else:
         raise NotImplementedError(name)

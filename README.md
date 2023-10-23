@@ -27,6 +27,8 @@ Generating minority class oversampling using conditional VAE
 
 For sample of config file, see `config/dev.yaml`
 
+## Note
+- Breast tissues: Is the baseline result trained on Scaled Dataset?
 
 ## Citations
 
