@@ -1,3 +1,12 @@
+breast-tissue: train_breast_tissue infer_breast_tissue
+
+train_breast_tissue:
+	python -m modules.cvae.train --config config/breast-tissue.yml
+
+infer_breast_tissue:
+	python -m modules.cvae --config config/breast-tissue.yml
+
+# Frog exp
 frogs : train_frogs infer_frogs
 
 train_frogs:
@@ -7,6 +16,7 @@ infer_frogs:
 	python -m modules.cvae --config config/frogs.yaml
 
 
+# Ecoli exp
 ecoli: train_ecoli infer_ecoli
 
 train_ecoli:
@@ -15,6 +25,7 @@ train_ecoli:
 infer_ecoli:
 	python -m modules.cvae --config config/ecoli.yaml
 
+# DEV 
 dev:
 	python -m modules.cvae \
 		--ds_name ionosphere\
@@ -28,6 +39,7 @@ dev:
 train:
 	python -m modules.cvae.train --config config/dev.yaml
 
+# DOWNLOAD DATASET 
 download: ds_init ds_download 
 
 ds_init:

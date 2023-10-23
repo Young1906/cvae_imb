@@ -1,0 +1,55 @@
+dataset:
+  name: breast-tissue 
+  batch_size: 64
+  num_workers: 4
+  val_split: 0.2
+
+model:
+  input_dim: 8
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 6
+
+training:
+  exp_name: breast-tissue 
+  max_epochs: 100
+  checkpoint_pth: checkpoints/breast-tissue
+  checkpoint_fn: breast-tissue 
+  checkpoint_monitor: valid-loss 
+
+
+oversampling:
+  dataset: breast-tissue 
+  classifier: svm 
+
+  # cvae params 
+  checkpoint_pth: checkpoints/breast-tissue
+  checkpoint_fn: breast-tissue 
+  input_dim: 8
+  encoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  decoder: 
+    - [16, 'relu']
+    - [8, 'relu']
+    - [16, 'relu']
+  z_dim: 8
+  n_class: 6
+
+  # evaluation metrics
+  score_avg_method: weighted 
+
+  # Path to result file
+  result_pth: results/breast-tissue.csv
+
+logger:
+  logger_name: breast-tissue 
+  logger_dir: .log

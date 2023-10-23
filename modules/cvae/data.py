@@ -6,7 +6,7 @@ import numpy as np
 
 from torch import nn
 from torch.utils.data import Dataset, DataLoader, random_split
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 
 # seeding
@@ -53,6 +53,19 @@ def _build_Xy_frog():
 
     return X, y, le
 
+def _build_Xy_breast_tissue():
+    df = pd.read_excel("datasets/breast_tissue.xls",
+                       sheet_name=1)
+    X, y = df.iloc[:, 3:].values, df.iloc[:,1].values
+    X, y = np.array(X), np.array(y)
+    
+    le = LabelEncoder()
+    y = le.fit_transform(y)
+
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
+
+    return X, y, le
 
 
 def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
@@ -66,6 +79,9 @@ def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
 
     elif name == "frogs":
         X, y, le = _build_Xy_frog()
+
+    elif name == "breast-tissue":
+        X, y, le = _build_Xy_breast_tissue()
 
     else:
         raise NotImplementedError(name)
