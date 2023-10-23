@@ -1,3 +1,7 @@
+# run all experiment
+all: heart_2cl breast-tissue frogs ecoli
+
+
 # Breast Tissue dataset
 # --------------------------------------------------
 heart_2cl: train_heart_2cl infer_heart_2cl
