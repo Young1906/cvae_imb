@@ -2,6 +2,25 @@
 Generating minority class oversampling using conditional VAE
 
 
+## Checklist
+
+### Dataset
+
+- [ ] Breast Cancer
+- [ ] Frogs MFCCs
+- [ ] Breast Tissue
+- [ ] Connectionist BenchMark
+- [ ] Ionosphere
+- [ ] Parkinsons
+- [ ] Heart Training Subset
+- [ ] Balance
+
+### Classifier
+
+- [ ] SMV
+- [ ] Logistic Regression
+- [ ] MLP
+
 
 ## [IMPORTANT] Experiment procedure
 
@@ -27,9 +46,11 @@ Generating minority class oversampling using conditional VAE
 
 For sample of config file, see `config/dev.yaml`
 
-## Note
+## Note/Questions
 - **Breast tissues**: Is the baseline result trained on Scaled Dataset?
 - **Heart 2CL dataset**: training on spectf.data as train and spectf.test as validation or concate and split later( as in Thu's [notebook](https://colab.research.google.com/drive/1zm-V7dIAE5F61NxAcNASD9WBR1YzJXcv?usp=sharing#scrollTo=8-kXWlmtl-OM)?)
+
+- MLP: where is the code for implementations?
 
 ## Citations
 
