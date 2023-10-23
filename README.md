@@ -1,5 +1,5 @@
 # Conditional VAE for imbalance learning
-Generating minority class oversampling using conditional VAE
+Minority class oversampling using conditional VAE
 
 ## Initial result (all on SVM)
 
