@@ -10,3 +10,14 @@ Generating minority class samples using conditional VAE
 - ...
 
 
+
+## Commands
+
+- Train a CVAE model to generate random samples from any class
+
+```bash
+    python -m modules.cvae.train --config <pth/to/config>
+```
+
+For sample of config file, see `config/dev.yaml`
+
