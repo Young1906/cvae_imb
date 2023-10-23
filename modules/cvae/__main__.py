@@ -75,7 +75,8 @@ def main(config: str):
 
     y_pred = clf.predict(X_valid)
     print("CVAE: ",
-          f1_score(
+          f1_score
+
               y_valid,
               y_pred,
               average=os_config.f1_score_avg))

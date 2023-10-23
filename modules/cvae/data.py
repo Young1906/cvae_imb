@@ -7,7 +7,7 @@ import numpy as np
 from torch import nn
 from torch.utils.data import Dataset, DataLoader, random_split
 from sklearn.preprocessing import LabelEncoder
-
+from sklearn.model_selection import train_test_split
 
 # seeding
 np.random.seed(1)
@@ -28,9 +28,15 @@ def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
         N, _ = X.shape
 
         # Index of validation samples: 0 -> train, 1->valid
-        valid_idx = np.random.choice(2, size=N, p=[1-valsplit, valsplit])
-        X_train, y_train = X[valid_idx==0,:], y[valid_idx==0]
-        X_valid, y_valid = X[valid_idx==1,:], y[valid_idx==1]
+        # valid_idx = np.random.choice(2, size=N, p=[1-valsplit, valsplit])
+        # X_train, y_train = X[valid_idx==0,:], y[valid_idx==0]
+        # X_valid, y_valid = X[valid_idx==1,:], y[valid_idx==1]
+        (X_train, X_valid, y_train, y_valid) =\
+                train_test_split(
+                        X, y, 
+                        test_size=valsplit,
+                        random_state=1,
+                        stratify=y)
 
         return (X_train, y_train), (X_valid, y_valid), le
 
