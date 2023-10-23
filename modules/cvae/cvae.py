@@ -5,27 +5,34 @@ from torch import nn
 from torch.nn import functional as F
 from torchsummary import summary
 
-from modules.net import build_mlp
-from modules.net import Dense
+from modules.cvae.net import build_mlp
+from modules.cvae.net import Dense
 
 
 class Encoder(nn.Module):
     """
-    MLP encoder 
+    Description:
+        MLP encoder 
+
+    Args:
+        - input_dim: dimension of input vector
+        - seq: [(h0, a0), ...] a tuple describe and mlp;
+            in which hi, ai is the number of hidden unit
+            and activation function at layer i, repectively
+        - z_dim: latent variable dimension
+
+    Return:
+        - mu, sigma
     """
-    def __init__(self, input_dim: int, mlp_name: str, z_dim: int):
+    def __init__(self, input_dim: int, seq: list[list], z_dim: int):
         super().__init__()
 
-        if mlp_name == "mlp_16_8_16":
-            from modules.net import mlp_16_8_16
-            self.mlp = mlp_16_8_16(input_dim)
-
-        else:
-            raise NotImplementedError(mlp_name)
+        self.mlp = build_mlp(input_dim, seq)
+        d_mlp, _ = seq[-1]
 
         # Dense layer return mu & logvar
-        self.mu = Dense(16, z_dim, 'tanh')
-        self.logvar= Dense(16, z_dim, 'tanh')
+        self.mu = Dense(d_mlp, z_dim, 'tanh')
+        self.logvar= Dense(d_mlp, z_dim, 'tanh')
 
 
     def forward(self, x):
@@ -37,25 +44,33 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     """
-    MLP decoder 
+    Description:
+        MLP decoder 
+
+    Args:
+        - input_dim: dimension of latent 
+        - seq: [(h0, a0), ...] a tuple describe and mlp;
+            in which hi, ai is the number of hidden unit
+            and activation function at layer i, repectively
+        - output_dim: input vector size
+
+    Return:
+        - mu, sigma
     """
-    def __init__(self, z_dim: int, mlp_name, output_dim: int, n_class :int):
+    def __init__(
+            self,
+            input_dim: int,
+            seq: list[list],
+            output_dim: int,):
         super().__init__()
 
-        self.n_class=n_class
-        
-        if mlp_name == "mlp_16_8_16":
-            from modules.net import mlp_16_8_16
-            self.mlp = mlp_16_8_16(z_dim + n_class)
-        
-        else:
-            raise NotImplementedError(mlp_name)
-
-        self.out = Dense(16, output_dim, 'tanh')
+        self.mlp = build_mlp(input_dim, seq)
+        d_mlp, _ = seq[-1]
+        self.out = Dense(d_mlp, output_dim, 'tanh')
 
 
-    def forward(self, z, y):
-        return self.out(self.mlp(torch.concat([z, y], -1)))
+    def forward(self, z):
+        return self.out(self.mlp(z))
 
 
 class CVAE(nn.Module):
@@ -68,7 +83,7 @@ class CVAE(nn.Module):
             n_class: int):
         super().__init__()
         self.encoder = Encoder(input_dim + n_class, encoder, z_dim)
-        self.decoder = Decoder(z_dim, decoder, input_dim, n_class)
+        self.decoder = Decoder(z_dim + n_class, decoder, input_dim)
         self.n_class = n_class
 
 
@@ -79,7 +94,7 @@ class CVAE(nn.Module):
         epsilon = torch.randn(mu.size()).type_as(x)
 
         z = mu + epsilon * torch.exp(logvar)
-        x_res = self.decoder(z, y)
+        x_res = self.decoder(torch.concat([z, y], -1))
 
         return x_res, mu, logvar 
 
@@ -87,8 +102,8 @@ class CVAE(nn.Module):
 class LightCVAE(L.LightningModule):
     def __init__(self,
                  input_dim: int,
-                 encoder: str,
-                 decoder: str,
+                 encoder: list[list],
+                 decoder: list[list],
                  z_dim: int,
                  n_class: int):
         super().__init__()
@@ -105,13 +120,13 @@ class LightCVAE(L.LightningModule):
 
         return loss
 
-    @torch.no_grad()
     def validation_step(self, batch, batch_idx):
         x, y = batch
         x_res, mu, logvar = self.cvae(x, y)
 
         loss = self.elbo(x, x_res, mu, logvar)
         self.log("valid-loss", loss, prog_bar=True)
+        return loss
 
     @staticmethod
     def elbo(x, x_res, mu, logvar):
@@ -122,4 +137,4 @@ class LightCVAE(L.LightningModule):
         return 0.5 * lR + 0.5 * kL
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=1e-4)
+        return torch.optim.Adam(self.parameters(), lr=1e-3)

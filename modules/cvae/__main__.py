@@ -1,41 +1,34 @@
 from collections import Counter
 
 import click
+import lightning as L
 import numpy as np
 import torch
-from sklearn.metrics import f1_score, classification_report
+import yaml
+from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score
 
-from modules.clf import build_classifier
-from modules.data import _build_Xy
-from modules.generate import generate
-from modules.generate import load_decoder
+from modules.base import OverSamplingConfig
+from modules.cvae.clf import build_classifier
+from modules.cvae.data import _build_Xy
+from modules.cvae.generate import generate
+from modules.cvae.generate import load_decoder
+
+L.seed_everything(1, workers=True)
 
 @click.command()
-@click.option(
-        "--ds_name", "-N", type=str, help="Name of the encoder")
-@click.option(
-        "--clf_name", "-F", type=str, help="SKLearn classifier")
-@click.option(
-        "--pth", "-P", type=str, help="Path to checkpoint")
-@click.option(
-        "--encoder", "-E", type=str, help="Name of the encoder")
-@click.option(
-        "--decoder", "-D", type=str, help="Name of the decoder")
-@click.option(
-        "--z_dim", "-Z", type=int, help="Latent dim")
-@click.option(
-        "--n_class", "-C", type=int, help="N classes")
+@click.option("--config", type=str, help="Path to config file")
+def main(config: str):
+    """
+    """
 
-def main(
-        ds_name: str,
-        clf_name: str,
-        pth:str,
-        encoder: str,
-        decoder: str,
-        z_dim: int,
-        n_class: int):
-    """
-    """
+    with open(config, "r") as f:
+        config = yaml.safe_load(f)
+
+    oversampling_config = OverSamplingConfig(**config['oversampling'])
+    print(oversampling_config)
+    return
+
     # dataset
     (X_train, y_train), (X_valid, y_valid), le =\
             _build_Xy(ds_name)

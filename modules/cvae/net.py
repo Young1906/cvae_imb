@@ -38,7 +38,6 @@ def build_mlp(input_dim, seq) -> nn.Module:
     """
     net = []
     h0, a0 = seq[0]
-
     net.append(Dense(input_dim, h0, a0))
 
     for j in range(1, len(seq)):
@@ -56,16 +55,6 @@ class TestMLP(unittest.TestCase):
         x = torch.randn(32, 128)
         y_hat = net(x)
         self.assertEqual(y_hat.shape, (32, 64))
-
-
-def mlp_16_8_16(input_dim: int) -> nn.Module:
-    return build_mlp(
-            input_dim, [
-                (16, 'leaky_relu'),
-                (8, 'leaky_relu'),
-                (16, 'leaky_relu')
-                ])
-
 
 
 if __name__ == "__main__":

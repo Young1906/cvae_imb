@@ -3,13 +3,13 @@ import unittest
 import torch
 from torch import nn
 from torch.nn import functional as F
-from modules.cvae import LightCVAE
-
+from modules.cvae.cvae import LightCVAE
+from modules.base import Layer
 
 def load_decoder(pth: str,
                  input_dim: int,
-                 encoder: str,
-                 decoder:str,
+                 encoder: list[Layer],
+                 decoder: list[Layer],
                  z_dim: int,
                  n_class: int) -> nn.Module:
     """

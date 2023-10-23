@@ -76,13 +76,15 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
     def prepare_data(self):
         (X_train, y_train), (X_valid, y_valid), le\
                 = _build_Xy(self.name, self.valsplit)
-        self.train = DatasetFromNumpyArray(X_train, y_train)
-        self.valid = DatasetFromNumpyArray(X_valid, y_valid)
+        self._train = X_train, y_train
+        self._valid = X_valid, y_valid
         self.le = le # label encoder
 
 
     def setup(self, stage: str):
-        pass
+        if stage == "fit":
+            self.train = DatasetFromNumpyArray(*self._train)
+            self.valid = DatasetFromNumpyArray(*self._valid)
 
     def train_dataloader(self):
         return DataLoader(

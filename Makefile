@@ -1,27 +1,15 @@
 dev:
-	python -m modules \
+	python -m modules.cvae \
 		--ds_name ionosphere\
-		--clf_name decision_tree\
-		--pth logs/dev/version_1/checkpoints/epoch=99-step=2000.ckpt\
+		--clf_name knn\
+		--pth logs/dev/version_0/checkpoints/epoch=99-step=2000.ckpt\
 		--encoder mlp_16_8_16\
 		--decoder mlp_16_8_16\
 		--z_dim 8\
 		--n_class 2 
 		 
-
-
 train:
-	python -m modules.train \
-		--exp_name dev\
-		--dataset ionosphere\
-		--batch_size 16\
-		--num_workers 4\
-		--input_dim 32\
-		--z_dim 8\
-		--n_class 2\
-		--val_split .1\
-		--max_epochs 100
-
+	python -m modules.cvae.train --config config/dev.yaml
 
 download: ds_init ds_download 
 
