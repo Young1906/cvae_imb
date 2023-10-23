@@ -1,6 +1,7 @@
 # Conditional VAE for imbalance learning
+Generating minority class oversampling using conditional VAE
 
-Generating minority class samples using conditional VAE
+
 
 ## [IMPORTANT] Experiment procedure
 
@@ -19,5 +20,12 @@ Generating minority class samples using conditional VAE
     python -m modules.cvae.train --config <pth/to/config>
 ```
 
+- CVAE oversampling experiment
+```bash
+    python -m modules.cvae --config <pth/to/config>
+```
+
 For sample of config file, see `config/dev.yaml`
 
+
+## Citations
