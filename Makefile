@@ -1,6 +1,8 @@
 # run all experiment
 all: breast_cancer balance parkinsons connectionist ionosphere heart_2cl breast_tissue frogs ecoli
 
+reset:
+	rm -rf .log logs checkpoints results/*.csv
 # Breast cancer dataset
 # --------------------------------------------------
 breast_cancer: train_breast_cancer infer_breast_cancer
@@ -89,13 +91,13 @@ train_heart_2cl:
 	python -m modules.cvae.train --config config/cvae/heart_2cl_catboost.yml
 
 infer_heart_2cl:
-	python -m modules.cvae --config config/cvae/hearth_2cl_catboost.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_decision_tree.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_gbc.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_knn.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_lr.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_mlp.yml
-	python -m modules.cvae --config config/cvae/hearth_2cl_svm.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_catboost.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_decision_tree.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_gbc.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_knn.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_lr.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_mlp.yml
+	python -m modules.cvae --config config/cvae/heart_2cl_svm.yml
 
 # Breast Tissue dataset
 # --------------------------------------------------
