@@ -6,7 +6,7 @@ from lightning.pytorch.loggers import TensorBoardLogger
 from lightning.pytorch.callbacks import ModelCheckpoint
 
 from modules.cvae.cvae import LightCVAE
-from modules.cvae.data import build_datamodules
+from modules.data import build_datamodules
 from modules.base import (
         DatasetConfig,
         ModelConfig,

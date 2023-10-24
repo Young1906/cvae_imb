@@ -12,7 +12,7 @@ from sklearn.metrics import f1_score
 from modules.base import LoggerConfig
 from modules.base import OverSamplingConfig
 from modules.cvae.clf import build_classifier
-from modules.cvae.data import _build_Xy
+from modules.data import _build_Xy
 from modules.cvae.generate import generate
 from modules.cvae.generate import load_decoder
 from modules.eval import evaluate
