@@ -25,6 +25,25 @@ def load_decoder(pth: str,
     return model.cvae.decoder
 
 
+def load_encoder(pth: str,
+                 input_dim: int,
+                 encoder: list[Layer],
+                 decoder: list[Layer],
+                 z_dim: int,
+                 n_class: int) -> nn.Module:
+    """
+    """
+    model = LightCVAE.load_from_checkpoint(
+            pth,
+            input_dim=input_dim,
+            encoder=encoder,
+            decoder=decoder,
+            z_dim=z_dim,
+            n_class=n_class)
+    model.eval()
+    return model.cvae.encoder
+
+
 def generate(decoder, n_samples, z_dim, y, n_class):
     y = F.one_hot(y, num_classes=n_class)
     z = torch.randn(size=[n_samples, z_dim])
