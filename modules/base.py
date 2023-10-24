@@ -1,20 +1,33 @@
+"""
+BaseModel
+"""
+
 from pydantic import BaseModel
 from typing import NamedTuple
 
 
 class Layer(NamedTuple):
-    h: int 
+    """
+    Describe layer of a MLP
+    """
+    h: int
     a: str
 
 
 class DatasetConfig(BaseModel):
+    """
+    Parsing dataset config
+    """
     name: str
     batch_size: int
     num_workers: int
-    val_split: float 
+    val_split: float
 
 
 class ModelConfig(BaseModel):
+    """
+    Parsing model config
+    """
     input_dim: int
     encoder: list[Layer]
     decoder: list[Layer]
@@ -23,6 +36,9 @@ class ModelConfig(BaseModel):
 
 
 class TrainingConfig(BaseModel):
+    """
+    Parsing training config
+    """
     max_epochs: int
     exp_name: str
     checkpoint_pth: str
@@ -31,6 +47,9 @@ class TrainingConfig(BaseModel):
 
 
 class OverSamplingConfig(BaseModel):
+    """
+    Parsing experiment config
+    """
     dataset: str
     classifier: str
 
@@ -40,7 +59,7 @@ class OverSamplingConfig(BaseModel):
     input_dim: int
     encoder: list[Layer]
     decoder: list[Layer]
-    z_dim: int 
+    z_dim: int
     n_class: int
 
     # evaluation metrics
@@ -51,5 +70,8 @@ class OverSamplingConfig(BaseModel):
 
 
 class LoggerConfig(BaseModel):
+    """
+    Parsing logger config
+    """
     logger_name: str
     logger_dir: str

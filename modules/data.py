@@ -1,21 +1,26 @@
-import pandas as pd
+"""
+Author: Tu T. Do 
+Email: tu.dothanh1906@gmail.com
+"""
 
 import lightning as L
-import torch
 import numpy as np
-
-from torch import nn
-from torch.utils.data import Dataset, DataLoader, random_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+import pandas as pd
+import torch
 from sklearn.model_selection import train_test_split
-
-from collections import Counter
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+from torch.utils.data import DataLoader
+from torch.utils.data import Dataset
 
 # seeding
 np.random.seed(1)
 
 
 def _build_Xy_ionosphere():
+    """
+    Ionosphere dataset
+    """
     df = pd.read_csv("datasets/ionosphere.data", header=None)
     X, y = df.iloc[:, 2:-1], df.iloc[:, -1]
     X, y = np.array(X), np.array(y)
@@ -26,8 +31,12 @@ def _build_Xy_ionosphere():
 
     return X, y, le
 
+
 def _build_Xy_ecoli():
-    df = pd.read_csv("datasets/ecoli.data", header=None, sep="\s+")
+    """
+    Ionosphere dataset
+    """
+    df = pd.read_csv("datasets/ecoli.data", header=None, sep=r"\s+")
     X, y = df.iloc[:, 1:-1].values, df.iloc[:, -1].values
     X, y = np.array(X), np.array(y)
 
@@ -42,6 +51,9 @@ def _build_Xy_ecoli():
 
 
 def _build_Xy_frog():
+    """
+    Ionosphere dataset
+    """
     df = pd.read_csv("datasets/Frogs_MFCCs.csv")
 
     X = df.iloc[:, :22].values
@@ -55,12 +67,15 @@ def _build_Xy_frog():
 
     return X, y, le
 
+
 def _build_Xy_breast_tissue():
-    df = pd.read_excel("datasets/breast_tissue.xls",
-                       sheet_name=1)
-    X, y = df.iloc[:, 3:].values, df.iloc[:,1].values
+    """
+    Ionosphere dataset
+    """
+    df = pd.read_excel("datasets/breast_tissue.xls", sheet_name=1)
+    X, y = df.iloc[:, 3:].values, df.iloc[:, 1].values
     X, y = np.array(X), np.array(y)
-    
+
     le = LabelEncoder()
     y = le.fit_transform(y)
 
@@ -71,15 +86,18 @@ def _build_Xy_breast_tissue():
 
 
 def _build_Xy_heart_2cl():
-    URL = 'datasets/spectf.train'
-    URL_ = 'datasets/spectf.test'
-    train = pd.read_csv(URL, header = None, sep=',')
-    valid = pd.read_csv(URL_, header=None, sep = ',') 
+    """
+    Ionosphere dataset
+    """
+    URL = "datasets/spectf.train"
+    URL_ = "datasets/spectf.test"
+    train = pd.read_csv(URL, header=None, sep=",")
+    valid = pd.read_csv(URL_, header=None, sep=",")
 
     df = pd.concat([train, valid])
     X, y = df.iloc[:, 1:].values, df.iloc[:, 0].values
     X, y = np.array(X), np.array(y)
-    
+
     le = LabelEncoder()
     y = le.fit_transform(y)
 
@@ -89,9 +107,8 @@ def _build_Xy_heart_2cl():
 
 
 def _build_Xy_connectionist():
-    df = pd.read_csv("datasets/sonar.all-data",
-                     header=None, sep=",")
-    X, y = df.iloc[:,:-1].values, df.iloc[:, -1].values
+    df = pd.read_csv("datasets/sonar.all-data", header=None, sep=",")
+    X, y = df.iloc[:, :-1].values, df.iloc[:, -1].values
     X, y = np.array(X), np.array(y)
 
     le = LabelEncoder()
@@ -102,11 +119,11 @@ def _build_Xy_connectionist():
 
     return X, y, le
 
+
 def _build_Xy_parkinsons():
-    df = pd.read_csv("datasets/parkinsons.data",
-                     sep=",")
-    df.drop(['name'], axis = 1, inplace=True)
-    X, y = df.drop(['status'], axis = 1), df['status']
+    df = pd.read_csv("datasets/parkinsons.data", sep=",")
+    df.drop(["name"], axis=1, inplace=True)
+    X, y = df.drop(["status"], axis=1), df["status"]
     X, y = X.values, y.values
 
     le = LabelEncoder()
@@ -116,6 +133,7 @@ def _build_Xy_parkinsons():
     X = scaler.fit_transform(X)
 
     return X, y, le
+
 
 def _build_Xy_balance():
     df = pd.read_csv("datasets/balance_3cl.csv", header=None, sep=",")
@@ -130,10 +148,11 @@ def _build_Xy_balance():
 
     return X, y, le
 
+
 def _build_Xy_breast_cancer():
     df = pd.read_csv("datasets/wdbc.data", header=None, sep=",")
     X, y = df.iloc[:, 2:].values, df.iloc[:, 1].values
-    
+
     le = LabelEncoder()
     y = le.fit_transform(y)
 
@@ -143,9 +162,8 @@ def _build_Xy_breast_cancer():
     return X, y, le
 
 
-def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
-    """
-    """
+def _build_Xy(name: str, valsplit: float = 0.2) -> Dataset:
+    """ """
     if name == "ionosphere":
         X, y, le = _build_Xy_ionosphere()
 
@@ -176,22 +194,22 @@ def _build_Xy(name: str, valsplit: float=.2) -> Dataset:
     else:
         raise NotImplementedError(name)
 
-    (X_train, X_valid, y_train, y_valid) =\
-            train_test_split(
-                    X, y, 
-                    test_size=valsplit,
-                    random_state=1,
-                    stratify=y)
+    (X_train, X_valid, y_train, y_valid) = train_test_split(
+        X, y, test_size=valsplit, random_state=1, stratify=y
+    )
 
     return (X_train, y_train), (X_valid, y_valid), le
 
+
 class DatasetFromNumpyArray(Dataset):
+    """
+    Dataset from numpy array (Feature, Label)
+    """
     def __init__(self, X, y):
         super().__init__()
         self.X, self.y = X, y
 
     def __getitem__(self, idx):
-
         if torch.is_tensor(idx):
             idx = idx.to_list()
 
@@ -207,13 +225,10 @@ class DatasetFromNumpyArray(Dataset):
 
 
 class DataModuleFromNumpyArray(L.LightningDataModule):
-    def __init__(
-            self,
-            name: str,
-            valsplit: float,
-            batch_size: int,
-            num_workers: int):
-
+    """
+    Build Lightning DataModule
+    """
+    def __init__(self, name: str, valsplit: float, batch_size: int, num_workers: int):
         super().__init__()
         self.name = name
         self.valsplit = valsplit
@@ -221,12 +236,10 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
         self.num_workers = num_workers
 
     def prepare_data(self):
-        (X_train, y_train), (X_valid, y_valid), le\
-                = _build_Xy(self.name, self.valsplit)
+        (X_train, y_train), (X_valid, y_valid), le = _build_Xy(self.name, self.valsplit)
         self._train = X_train, y_train
         self._valid = X_valid, y_valid
-        self.le = le # label encoder
-
+        self.le = le  # label encoder
 
     def setup(self, stage: str):
         if stage == "fit":
@@ -235,30 +248,23 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
 
     def train_dataloader(self):
         return DataLoader(
-                self.train,
-                batch_size=self.batch_size,
-                shuffle=True,
-                num_workers=self.num_workers)
+            self.train,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
+        )
 
     def val_dataloader(self):
         return DataLoader(
-                self.valid,
-                batch_size=self.batch_size,
-                num_workers=self.num_workers)
+            self.valid, batch_size=self.batch_size, num_workers=self.num_workers
+        )
 
 
 def build_datamodules(
-        name: str,
-        val_split: float,
-        batch_size: int,
-        num_workers: int) -> L.LightningDataModule:
+    name: str, val_split: float, batch_size: int, num_workers: int
+) -> L.LightningDataModule:
+    """
+    Interface to build datamodule from other function
+    """
 
-    return DataModuleFromNumpyArray(
-            name, val_split, batch_size, num_workers)
-
-
-if __name__ == "__main__":
-    X, y, le = _build_Xy_breast_cancer()
-
-    print(Counter(y))
-    print(X.shape)
+    return DataModuleFromNumpyArray(name, val_split, batch_size, num_workers)

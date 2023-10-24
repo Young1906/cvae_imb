@@ -1,3 +1,8 @@
+"""
+Author: Tu T .Do
+Email: tu.dothanh1906@gmail.com
+"""
+
 import logging
 import os
 
@@ -5,6 +10,9 @@ import os
 # --------------------------------------------------
 # HELPER FUNCTION
 def clean_name(name: str) -> str:
+    """
+    clean name to a file name
+    """
     name = name.lower()
     name = name.split(" ")
     name = "-".join(name)
@@ -16,6 +24,9 @@ def clean_name(name: str) -> str:
 # HELPER FUNCTION
 
 def build_logger(name: str, log_path: str):
+    """
+    Return a logger with name -> logpath
+    """
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
@@ -29,10 +40,7 @@ def build_logger(name: str, log_path: str):
     )
 
     # FileHandler
-    fh = logging.FileHandler("{pth}/{fn_name}.txt".format(
-        pth=log_path,
-        fn_name=clean_name(name)
-    ))
+    fh = logging.FileHandler(f"{log_path}/{clean_name(name)}.txt")
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
