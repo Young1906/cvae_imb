@@ -98,6 +98,12 @@ Other:
 
 For sample of config file, see `config/dev.yaml`
 
+- Reproduce all experiments
+
+```bash
+make all
+```
+
 ## Note/Questions
 - **Breast tissues**: Is the baseline result trained on Scaled Dataset?
 - **Heart 2CL dataset**: training on spectf.data as train and spectf.test as validation or concate and split later( as in Thu's [notebook](https://colab.research.google.com/drive/1zm-V7dIAE5F61NxAcNASD9WBR1YzJXcv?usp=sharing#scrollTo=8-kXWlmtl-OM)?)
