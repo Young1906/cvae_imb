@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 4
+  name: ionosphere
+  num_workers: 6
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: ionosphere
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 32
+  n_class: 2
+  z_dim: 8
+oversampling:
+  checkpoint_fn: ionosphere
+  checkpoint_pth: checkpoints/ionosphere
+  classifier: mlp
+  dataset: ionosphere
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 32
+  n_class: 2
+  result_pth: results/all.csv
+  score_avg_method: binary
+  z_dim: 8
+training:
+  checkpoint_fn: ionosphere
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/ionosphere
+  exp_name: ionosphere
+  max_epochs: 100

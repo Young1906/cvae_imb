@@ -1,85 +1,133 @@
 # run all experiment
-all: heart_2cl breast-tissue frogs ecoli
+all: breast_cancer balance parkinsons connectionist ionosphere heart_2cl breast_tissue frogs ecoli
 
 # Breast cancer dataset
 # --------------------------------------------------
 breast_cancer: train_breast_cancer infer_breast_cancer
 
 train_breast_cancer:
-	python -m modules.cvae.train --config config/breast_cancer.yml
+	python -m modules.cvae.train --config config/cvae/breast_cancer_catboost.yml
 
 infer_breast_cancer:
-	python -m modules.cvae --config config/breast_cancer.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_catboost.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_decision_tree.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_gbc.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_knn.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_lr.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_mlp.yml
+	python -m modules.cvae --config config/cvae/breast_cancer_svm.yml
 
 # Balance dataset
 # --------------------------------------------------
 balance: train_balance infer_balance
 
 train_balance:
-	python -m modules.cvae.train --config config/balance.yml
+	python -m modules.cvae.train --config config/cvae/balance_catboost.yml
 
 infer_balance:
-	python -m modules.cvae --config config/balance.yml
+	python -m modules.cvae --config config/cvae/balance_catboost.yml
+	python -m modules.cvae --config config/cvae/balance_decision_tree.yml
+	python -m modules.cvae --config config/cvae/balance_gbc.yml
+	python -m modules.cvae --config config/cvae/balance_knn.yml
+	python -m modules.cvae --config config/cvae/balance_lr.yml
+	python -m modules.cvae --config config/cvae/balance_mlp.yml
+	python -m modules.cvae --config config/cvae/balance_svm.yml
 
 # Parkinsons dataset
 # --------------------------------------------------
 parkinsons: train_parkinsons infer_parkinsons
 
 train_parkinsons:
-	python -m modules.cvae.train --config config/parkinsons.yml
+	python -m modules.cvae.train --config config/cvae/parkinsons_catboost.yml
 
 infer_parkinsons:
-	python -m modules.cvae --config config/parkinsons.yml
+	python -m modules.cvae --config config/cvae/parkinsons_catboost.yml
+	python -m modules.cvae --config config/cvae/parkinsons_decision_tree.yml
+	python -m modules.cvae --config config/cvae/parkinsons_gbc.yml
+	python -m modules.cvae --config config/cvae/parkinsons_knn.yml
+	python -m modules.cvae --config config/cvae/parkinsons_lr.yml
+	python -m modules.cvae --config config/cvae/parkinsons_mlp.yml
+	python -m modules.cvae --config config/cvae/parkinsons_svm.yml
 
 # Connectionist dataset
 # --------------------------------------------------
 connectionist: train_connectionist infer_connectionist
 
 train_connectionist:
-	python -m modules.cvae.train --config config/connectionist.yml
+	python -m modules.cvae.train --config config/cvae/connectionist_catboost.yml
 
 infer_connectionist:
-	python -m modules.cvae --config config/connectionist.yml
+	python -m modules.cvae --config config/cvae/connectionist_catboost.yml
+	python -m modules.cvae --config config/cvae/connectionist_decision_tree.yml
+	python -m modules.cvae --config config/cvae/connectionist_gbc.yml
+	python -m modules.cvae --config config/cvae/connectionist_knn.yml
+	python -m modules.cvae --config config/cvae/connectionist_lr.yml
+	python -m modules.cvae --config config/cvae/connectionist_mlp.yml
+	python -m modules.cvae --config config/cvae/connectionist_svm.yml
 
 # Breast Tissue dataset
 # --------------------------------------------------
 ionosphere: train_ionosphere infer_ionosphere
 
 train_ionosphere:
-	python -m modules.cvae.train --config config/ionosphere.yml
+	python -m modules.cvae.train --config config/cvae/ionosphere_catboost.yml
 
 infer_ionosphere:
-	python -m modules.cvae --config config/ionosphere.yml
+	python -m modules.cvae --config config/cvae/ionosphere_catboost.yml
+	python -m modules.cvae --config config/cvae/ionosphere_decision_tree.yml
+	python -m modules.cvae --config config/cvae/ionosphere_gbc.yml
+	python -m modules.cvae --config config/cvae/ionosphere_knn.yml
+	python -m modules.cvae --config config/cvae/ionosphere_lr.yml
+	python -m modules.cvae --config config/cvae/ionosphere_mlp.yml
+	python -m modules.cvae --config config/cvae/ionosphere_svm.yml
 
 # Breast Tissue dataset
 # --------------------------------------------------
 heart_2cl: train_heart_2cl infer_heart_2cl
 
 train_heart_2cl:
-	python -m modules.cvae.train --config config/heart_2cl.yml
+	python -m modules.cvae.train --config config/cvae/heart_2cl_catboost.yml
 
 infer_heart_2cl:
-	python -m modules.cvae --config config/heart_2cl.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_catboost.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_decision_tree.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_gbc.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_knn.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_lr.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_mlp.yml
+	python -m modules.cvae --config config/cvae/hearth_2cl_svm.yml
 
 # Breast Tissue dataset
 # --------------------------------------------------
-breast-tissue: train_breast_tissue infer_breast_tissue
+breast_tissue: train_breast_tissue infer_breast_tissue
 
 train_breast_tissue:
-	python -m modules.cvae.train --config config/breast-tissue.yml
+	python -m modules.cvae.train --config config/cvae/breast_tissue_catboost.yml
 
 infer_breast_tissue:
-	python -m modules.cvae --config config/breast-tissue.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_catboost.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_decision_tree.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_gbc.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_knn.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_lr.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_mlp.yml
+	python -m modules.cvae --config config/cvae/breast_tissue_svm.yml
 
 # Frog exp
 # --------------------------------------------------
 frogs : train_frogs infer_frogs
 
 train_frogs:
-	python -m modules.cvae.train --config config/frogs.yaml
+	python -m modules.cvae.train --config config/cvae/frogs_catboost.yml
 
 infer_frogs:
-	python -m modules.cvae --config config/frogs.yaml
+	python -m modules.cvae --config config/cvae/frogs_catboost.yml
+	python -m modules.cvae --config config/cvae/frogs_decision_tree.yml
+	python -m modules.cvae --config config/cvae/frogs_gbc.yml
+	python -m modules.cvae --config config/cvae/frogs_knn.yml
+	python -m modules.cvae --config config/cvae/frogs_lr.yml
+	python -m modules.cvae --config config/cvae/frogs_mlp.yml
+	python -m modules.cvae --config config/cvae/frogs_svm.yml
 
 
 # Ecoli exp
@@ -87,10 +135,10 @@ infer_frogs:
 ecoli: train_ecoli infer_ecoli
 
 train_ecoli:
-	python -m modules.cvae.train --config config/ecoli.yaml
+	python -m modules.cvae.train --config config/ecoli.yml
 
 infer_ecoli:
-	python -m modules.cvae --config config/ecoli.yaml
+	python -m modules.cvae --config config/ecoli.yml
 
 
 # DOWNLOAD DATASET 

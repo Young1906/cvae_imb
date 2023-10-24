@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 64
+  name: frogs
+  num_workers: 6
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: frogs
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 22
+  n_class: 2
+  z_dim: 8
+oversampling:
+  checkpoint_fn: frogs
+  checkpoint_pth: checkpoints/frogs
+  classifier: catboost
+  dataset: frogs
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 22
+  n_class: 2
+  result_pth: results/all.csv
+  score_avg_method: binary
+  z_dim: 8
+training:
+  checkpoint_fn: frogs
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/frogs
+  exp_name: frogs
+  max_epochs: 100

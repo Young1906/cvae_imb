@@ -27,7 +27,7 @@ training:
 
 oversampling:
   dataset: breast-cancer 
-  classifier: svm 
+  classifier: mlp 
 
   # cvae params 
   checkpoint_pth: checkpoints/breast-cancer

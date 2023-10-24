@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 8
+  name: breast-cancer
+  num_workers: 4
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: breast-cancer
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 30
+  n_class: 2
+  z_dim: 8
+oversampling:
+  checkpoint_fn: breast-cancer
+  checkpoint_pth: checkpoints/breast-cancer
+  classifier: decision_tree
+  dataset: breast-cancer
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 30
+  n_class: 2
+  result_pth: results/all.csv
+  score_avg_method: binary
+  z_dim: 8
+training:
+  checkpoint_fn: breast-cancer
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/breast-cancer
+  exp_name: breast-cancer
+  max_epochs: 100

@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 4
+  name: ecoli
+  num_workers: 1
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: ecoli
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 7
+  n_class: 2
+  z_dim: 8
+oversampling:
+  checkpoint_fn: ecoli
+  checkpoint_pth: checkpoints/ecoli
+  classifier: gbc
+  dataset: ecoli
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 7
+  n_class: 2
+  result_pth: results/all.csv
+  score_avg_method: binary
+  z_dim: 8
+training:
+  checkpoint_fn: ecoli
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/ecoli
+  exp_name: ecoli
+  max_epochs: 100

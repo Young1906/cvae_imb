@@ -27,7 +27,7 @@ training:
 
 oversampling:
   dataset: frogs 
-  classifier: svm 
+  classifier: catboost 
 
   # cvae params 
   checkpoint_pth: checkpoints/frogs

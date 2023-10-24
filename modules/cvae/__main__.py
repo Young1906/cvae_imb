@@ -39,7 +39,6 @@ def main(config: str):
             logger_config.logger_dir)
 
     # logging config
-    logger.info("-------------------------------------------------------")
     logger.info("<START>")
     logger.info(config)
 
@@ -99,6 +98,7 @@ def main(config: str):
     # Logging result
     logger.info(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
     logger.info("<END>")
+    logger.info("-"*80)
 
     # Logging to result
     with open(os_config.result_pth, "a") as fn:

@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 8
+  name: balance
+  num_workers: 4
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: balance
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 4
+  n_class: 3
+  z_dim: 8
+oversampling:
+  checkpoint_fn: balance
+  checkpoint_pth: checkpoints/balance
+  classifier: lr
+  dataset: balance
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 4
+  n_class: 3
+  result_pth: results/all.csv
+  score_avg_method: weighted
+  z_dim: 8
+training:
+  checkpoint_fn: balance
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/balance
+  exp_name: balance
+  max_epochs: 100

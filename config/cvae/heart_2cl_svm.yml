@@ -1,0 +1,56 @@
+dataset:
+  batch_size: 16
+  name: heart_2cl
+  num_workers: 4
+  val_split: 0.2
+logger:
+  logger_dir: .log
+  logger_name: heart_2cl
+model:
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 44
+  n_class: 2
+  z_dim: 8
+oversampling:
+  checkpoint_fn: heart_2cl
+  checkpoint_pth: checkpoints/heart_2cl
+  classifier: svm
+  dataset: heart_2cl
+  decoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  encoder:
+  - - 16
+    - relu
+  - - 8
+    - relu
+  - - 16
+    - relu
+  input_dim: 44
+  n_class: 2
+  result_pth: results/all.csv
+  score_avg_method: binary
+  z_dim: 8
+training:
+  checkpoint_fn: heart_2cl
+  checkpoint_monitor: valid-loss
+  checkpoint_pth: checkpoints/heart_2cl
+  exp_name: heart_2cl
+  max_epochs: 100

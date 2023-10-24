@@ -36,12 +36,14 @@ Other (not included in Hoang's repo)
 
 - [x] SMV
 - [x] Logistic Regression
-- [ ] MLP
+- [x] MLP
 
-Other (not included in Hoang's repo)
+Other:
 
 - [x] KNN
 - [x] Decision Tree
+- [x] Gradient Boosting Classifier
+- [x] CatBoost
 
 
 ## [IMPORTANT] Experiment procedure
@@ -72,11 +74,13 @@ For sample of config file, see `config/dev.yaml`
 - **Breast tissues**: Is the baseline result trained on Scaled Dataset?
 - **Heart 2CL dataset**: training on spectf.data as train and spectf.test as validation or concate and split later( as in Thu's [notebook](https://colab.research.google.com/drive/1zm-V7dIAE5F61NxAcNASD9WBR1YzJXcv?usp=sharing#scrollTo=8-kXWlmtl-OM)?)
 
-- MLP: where is the code for implementations?
+- **MLP**: where is the code for implementations?
 
 ## Citations
 
 ```bibtex
+{
+}
 ```
 
 ## Resource
