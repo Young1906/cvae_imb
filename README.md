@@ -92,6 +92,7 @@ Other:
 ```
 
 - CVAE oversampling experiment
+
 ```bash
     python -m modules.cvae --config <pth/to/config>
 ```
@@ -101,7 +102,7 @@ For sample of config file, see `config/dev.yaml`
 - Reproduce all experiments
 
 ```bash
-make all
+    make all
 ```
 
 ## Note/Questions
