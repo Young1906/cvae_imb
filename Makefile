@@ -1,3 +1,6 @@
+dev:
+	python -m modules.mcmc.mcmc
+
 # run all experiment
 all: breast_cancer balance parkinsons connectionist ionosphere heart_2cl breast_tissue frogs ecoli
 
