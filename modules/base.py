@@ -69,6 +69,17 @@ class OverSamplingConfig(BaseModel):
     result_pth: str
 
 
+class MCMCConfig(BaseModel):
+    dataset: str
+    classifier: str
+
+    # evaluation metrics
+    score_avg_method: str
+
+    # Pth to result file
+    result_pth: str
+
+
 class LoggerConfig(BaseModel):
     """
     Parsing logger config
