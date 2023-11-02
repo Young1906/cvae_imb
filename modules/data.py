@@ -14,8 +14,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 
 # seeding
-# np.random.seed(1)
-
+np.random.seed(1)
 
 def _build_Xy_ionosphere():
     """

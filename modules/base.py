@@ -23,7 +23,6 @@ class DatasetConfig(BaseModel):
     num_workers: int
     val_split: float
 
-
 class ModelConfig(BaseModel):
     """
     Parsing model config
@@ -71,12 +70,13 @@ class OverSamplingConfig(BaseModel):
 
 class MCMCConfig(BaseModel):
     dataset: str
+    
+    sampler_d: str
+    max_iter: int
+    step_size: float
+
     classifier: str
-
-    # evaluation metrics
     score_avg_method: str
-
-    # Pth to result file
     result_pth: str
 
 

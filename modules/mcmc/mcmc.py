@@ -1,26 +1,22 @@
-"""
-.idea:
-    using MCMC to oversampling minority class to addresse imbalance learning
-    problem.
-
-    quantity needed :
-    H = p(x | y) / p(x_t | y) \
-            = [p(x, y) / p(y)] / [p(x_t, y) / p(y)]\
-            = [p(y | x) * p(x)]/ [p(y | x_t) * p(x_t)]
-            = p(y | x) / p(y | x_t) * p(x) / p(x_t)
-
-    to model :
-    + p(y | x) -> train a classifier d_theta(x) = p(y | x)
-    + p(x) -> simply assume x ~ N(mu, sigma)
-"""
+from collections import Counter
 
 import numpy as np
-from collections import Counter
-from tqdm import tqdm
-from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.metrics import f1_score
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 from modules.clf import build_classifier
+from modules.data import _build_Xy
+
+
+def enable_stochastic_process(f):
+    def wrapper(*args, **kwargs):
+        np.random.seed() # cancel effect of numpy seed
+        result = f(*args, **kwargs)
+        np.random.seed(1) # enable effect of numpy seed
+        return result
+    return wrapper
 
 
 class MCMCOverSampling:
@@ -28,6 +24,8 @@ class MCMCOverSampling:
         self.max_iter = max_iter
         self.d_factory = d_factory
         self.step_size = step_size
+
+        self.__fitted = False
 
     @staticmethod
     def gaussian_loglikelihood(x, mu, scale) -> float:
@@ -80,6 +78,7 @@ class MCMCOverSampling:
                 return np.stack(samples)
 
     @staticmethod
+    @enable_stochastic_process
     def __wrapMCMC(d, f, q, X, y):
         """
         Automatically compute number of obs need to samples
@@ -104,37 +103,35 @@ class MCMCOverSampling:
         return np.concatenate([X, *X_syn], 0), np.concatenate([y, *y_syn])
 
 
-
     def fit(self, X, y):
-        # Modeling p(X) by Gaussian
-        Mu = X.mean(axis=0)
-        Sig = np.std(X, axis=0)
-
-        # Prior pdf
-        f = lambda x: self.gaussian_loglikelihood(x, Mu, Sig)
-
-
-        X, X_valid, y, y_valid = train_test_split(
+        # Splitting
+        X_train, X_valid, y_train, y_valid = train_test_split(
                 X, y,
                 test_size=.25,
                 stratify=y)
 
+        # Modeling p(X) by Gaussian
+        Mu = X_train.mean(axis=0)
+        Sig = np.std(X_train, axis=0)
+
+        # Prior pdf
+        f = lambda x: self.gaussian_loglikelihood(x, Mu, Sig)
+
         # initial classifier
         d = self.d_factory()
-        d = self.__fit_d(d, X, y)
+        d = self.__fit_d(d, X_train, y_train)
 
         # Proposal distribution
         q = lambda x: np.random.normal(x, self.step_size * Sig)
 
         self.best_f1 = 0
-        self.best_d = None
+        self.best_d = d 
 
         bar = tqdm(range(self.max_iter))
-
-        for _ in bar: 
-            X_syn, y_syn = self.__wrapMCMC(d, f, q, X, y)
+        for i in bar: 
+            X_syn, y_syn = \
+                    self.__wrapMCMC(self.best_d, f, q, X_train, y_train)
             d = self.__fit_d(d, X_syn, y_syn)
-
             f1 = f1_score(y_valid, d.predict(X_valid), average="weighted")
 
             if f1 > self.best_f1:
@@ -142,7 +139,7 @@ class MCMCOverSampling:
                 self.best_d = d
             bar.set_description(f"Best F1: {self.best_f1: .5f}")
 
-        return self.__wrapMCMC(self.best_d, f, q, X, y)
+        self.__fitted=True
 
 
     def __fit_d(self, d, X, y):
@@ -155,16 +152,28 @@ class MCMCOverSampling:
 
 
     def resample(self, X, y):
-        return self.fit(X, y)
+
+        if not self.__fitted:
+            raise ValueError("The sampler is not fitted")
+
+        # Modeling p(X) by Gaussian
+        Mu = X.mean(axis=0)
+        Sig = np.std(X, axis=0)
+
+        # Prior pdf
+        f = lambda x: self.gaussian_loglikelihood(x, Mu, Sig)
+        # Proposal distribution
+        q = lambda x: np.random.normal(x, self.step_size * Sig)
+        
+        return self.__wrapMCMC(self.best_d, f, q, X, y)
+
 
 if __name__ == "__main__":
-    # d_factory = lambda: build_classifier("mlp")
-    # d_factory = lambda: RandomForestClassifier()
 
+    omc = MCMCOverSampling(
+            lambda: build_classifier("catboost"),
+            max_iter= 100, step_size=.25)
 
-    omc = MCMCOverSampling(lambda: build_classifier("lr"), max_iter= 100, step_size=.25)
-
-    from modules.data import _build_Xy
     (X, y), (X_test, y_test), le = _build_Xy("breast-tissue")
 
     # Baseline
@@ -173,9 +182,9 @@ if __name__ == "__main__":
     print(f1_score(y_test, clf.predict(X_test), average="weighted"))
 
 
-    X_syn, y_syn = omc.fit(X, y)
+    omc.fit(X, y)
+    X_syn, y_syn = omc.resample(X, y)
+
     clf = build_classifier("svm")
     clf.fit(X_syn, y_syn)
     print(f1_score(y_test, clf.predict(X_test), average="weighted"))
-
-
