@@ -1,11 +1,27 @@
 """
+.idea:
+    using MCMC to oversampling minority class to addresse imbalance learning
+    problem.
+
+    quantity needed :
+    H = p(x | y) / p(x_t | y) \
+            = [p(x, y) / p(y)] / [p(x_t, y) / p(y)]\
+            = [p(y | x) * p(x)]/ [p(y | x_t) * p(x_t)]
+            = p(y | x) / p(y | x_t) * p(x) / p(x_t)
+
+    to model :
+    + p(y | x) -> train a classifier d_theta(x) = p(y | x)
+    + p(x) -> simply assume x ~ N(mu, sigma)
 """
 
 import numpy as np
 from collections import Counter
-
-from sklearn.linear_model import LogisticRegression
+from tqdm import tqdm
 from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.metrics import f1_score
+
+from modules.clf import build_classifier
+
 
 class MCMCOverSampling:
     def __init__(self, d_factory: callable, max_iter: int = 1, step_size: float = .25):
@@ -90,7 +106,7 @@ class MCMCOverSampling:
 
 
     def fit(self, X, y):
-        # Modeling p(X) by Multivariate Gaussian
+        # Modeling p(X) by Gaussian
         Mu = X.mean(axis=0)
         Sig = np.std(X, axis=0)
 
@@ -104,14 +120,29 @@ class MCMCOverSampling:
                 stratify=y)
 
         # initial classifier
-        d0 = self.d_factory()
-        d0, (m, s) = self.__fit_d(d0, X, y)
+        d = self.d_factory()
+        d = self.__fit_d(d, X, y)
 
         # Proposal distribution
         q = lambda x: np.random.normal(x, self.step_size * Sig)
 
-        X_syn, y_syn = self.__wrapMCMC(d0, f, q, X, y)
+        self.best_f1 = 0
+        self.best_d = None
 
+        bar = tqdm(range(self.max_iter))
+
+        for _ in bar: 
+            X_syn, y_syn = self.__wrapMCMC(d, f, q, X, y)
+            d = self.__fit_d(d, X_syn, y_syn)
+
+            f1 = f1_score(y_valid, d.predict(X_valid), average="weighted")
+
+            if f1 > self.best_f1:
+                self.best_f1 = f1
+                self.best_d = d
+            bar.set_description(f"Best F1: {self.best_f1: .5f}")
+
+        return self.__wrapMCMC(self.best_d, f, q, X, y)
 
 
     def __fit_d(self, d, X, y):
@@ -119,22 +150,32 @@ class MCMCOverSampling:
         d: sklearn classifier
         X, y: data
         """
-
-        cv = cross_val_score(d, X, y, cv=5)
         d.fit(X, y)
+        return d
 
-        return d, (cv.mean(), cv.std())
 
-
-    def resample(self):
-        pass
-
+    def resample(self, X, y):
+        return self.fit(X, y)
 
 if __name__ == "__main__":
-    d_factory = lambda: LogisticRegression()
-    omc = MCMCOverSampling(d_factory, max_iter= 5, step_size=.25)
-    X, y = np.random.normal(0, 1, (128, 16)),\
-            np.random.randint(low=0, high=2, size=(128))
+    # d_factory = lambda: build_classifier("mlp")
+    # d_factory = lambda: RandomForestClassifier()
 
-    omc.fit(X, y)
+
+    omc = MCMCOverSampling(lambda: build_classifier("lr"), max_iter= 100, step_size=.25)
+
+    from modules.data import _build_Xy
+    (X, y), (X_test, y_test), le = _build_Xy("breast-tissue")
+
+    # Baseline
+    clf = build_classifier("svm")
+    clf.fit(X, y)
+    print(f1_score(y_test, clf.predict(X_test), average="weighted"))
+
+
+    X_syn, y_syn = omc.fit(X, y)
+    clf = build_classifier("svm")
+    clf.fit(X_syn, y_syn)
+    print(f1_score(y_test, clf.predict(X_test), average="weighted"))
+
 
