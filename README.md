@@ -20,6 +20,18 @@ H & = \frac{p(x | y = c_i)}{p(x_t | y = c_i)} \\
 \end{equation}
 $$
 
+The first term $p(y | x)$, we can train a classifier to approximate this quantity. The choice of $d_\theta(.)$ is very flexible, can be `scikit-learn` implementation of `LogisticRegression()` for binary classification problem or a simple fully connected network.
+
+$$
+p(y | x) = d_\theta(x)
+$$
+
+
+For the second term, we can just assume x to be  a parametrics distribution such as Multivariate Gaussian. 
+
+$$
+x \sim \mathcal{N}(.; \mu, \Sigma)
+$$
 
 
 ## Conditional VAE
@@ -179,6 +191,7 @@ For sample of config file, see `config/dev.yaml`
 {
 }
 ```
+
 
 ## Resource
 
