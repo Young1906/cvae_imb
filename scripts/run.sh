@@ -1,4 +1,10 @@
 #!/bin/bash
-for i in $(seq 1 10); do
-	python -m modules.data
+CONFIGS="config/mcmc/*"
+
+for f in $CONFIGS
+do
+	for i in {1..15}
+	do
+		python -m modules.mcmc -C $f
+	done
 done

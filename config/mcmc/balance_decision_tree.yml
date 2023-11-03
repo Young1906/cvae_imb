@@ -1,0 +1,11 @@
+logger:
+  logger_dir: .log
+  logger_name: mcmc
+mcmc:
+  classifier: decision_tree
+  dataset: balance
+  max_iter: 50
+  result_pth: results/mcmc.csv
+  sampler_d: lr
+  score_avg_method: weighted
+  step_size: 0.25
