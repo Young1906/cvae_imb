@@ -1,6 +1,27 @@
 # Conditional VAE & MCMC for imbalance learning
 Minority class oversampling using conditional VAE and MCMC
 
+## TLDR
+
+Oversampling
+
+
+### MCMC
+
+To sample from from class $c_i$ with probability density function $p(X | y = c_i)$, we can utilize Markov Chain Monte Carlo, we need quantity:
+
+$$
+\begin{equation}
+\begin{aligned}
+H & = \frac{p(x | y = c_i)}{p(x_t | y = c_i)} \\ 
+    & = \frac{p(x, y)/p(y)}{p(x_t, y)/p(y)} \\
+    & = \frac{p(y|x)}{p(y|x_t)} \times \frac{p(x)}{p(x_t)}
+\end{aligned}
+\end{equation}
+$$
+
+
+
 ## Conditional VAE
 
 ### F1-score
