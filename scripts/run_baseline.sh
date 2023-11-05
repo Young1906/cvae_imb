@@ -4,5 +4,9 @@ CONFIGS="config/baseline/*"
 
 for f in $CONFIGS
 do
-	timeout 300 python -m modules.baseline -C $f
+	for i in $(seq 1 15)
+	do
+		echo "Experiment: ${f}, trial ${i}"
+		timeout 120 python -m modules.baseline -C $f
+	done
 done

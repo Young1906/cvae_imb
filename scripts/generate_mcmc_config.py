@@ -3,7 +3,7 @@ import yaml
 
 
 if __name__ == "__main__":
-    with open("config/mcmc/dev.yml", "r") as f:
+    with open("config/_dev_mcmc.yml", "r") as f:
         tmp = yaml.safe_load(f)
 
     ls_dataset = ["ionosphere", "ecoli", "frogs", "breast-tissue", "heart_2cl", "connectionist", "parkinsons", "balance", "breast-cancer"]

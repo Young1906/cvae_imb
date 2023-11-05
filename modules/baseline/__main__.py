@@ -3,6 +3,7 @@ import datetime
 import click
 import numpy as np
 import yaml
+import sys
 
 from modules.base import BaselineConfig
 from modules.base import LoggerConfig
@@ -46,7 +47,12 @@ def main(config: str):
     # Sampler
     # -------------------------------------------------- 
     sampler = build_sampler(baseline_config.sampler_name)
-    X, y = sampler.fit_resample(X, y)
+    try:
+        X, y = sampler.fit_resample(X, y)
+
+    except Exception as e:
+        logger.critical(e)
+        sys.exit(1)
 
     # CLF 
     # -------------------------------------------------- 
