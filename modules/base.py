@@ -86,3 +86,11 @@ class LoggerConfig(BaseModel):
     """
     logger_name: str
     logger_dir: str
+
+
+class BaselineConfig(BaseModel):
+    dataset: str
+    sampler_name: str
+    classifier: str
+    score_avg_method: str
+    result_pth: str

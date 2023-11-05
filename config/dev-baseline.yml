@@ -1,0 +1,15 @@
+baseline:
+  dataset: heart_2cl
+  sampler_name: baseline
+  classifier: mlp
+
+  # evaluation params
+  score_avg_method: weighted 
+  
+  # Path to result file
+  result_pth: results/baseline.csv
+
+logger:
+  logger_name: baseline 
+  logger_dir: .log
+

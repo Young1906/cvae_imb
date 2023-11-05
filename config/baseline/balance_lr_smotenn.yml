@@ -1,0 +1,9 @@
+baseline:
+  classifier: lr
+  dataset: balance
+  result_pth: results/baseline.csv
+  sampler_name: smotenn
+  score_avg_method: weighted
+logger:
+  logger_dir: .log
+  logger_name: baseline

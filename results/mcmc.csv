@@ -1274,3 +1274,17 @@
 2023-11-03 15:46:00.578337,config/mcmc/parkinsons_svm.yml,0.89065,0.87179,0.85551
 2023-11-03 15:46:04.401332,config/mcmc/parkinsons_svm.yml,0.89065,0.87179,0.85551
 2023-11-03 15:46:08.126913,config/mcmc/parkinsons_svm.yml,0.87253,0.84615,0.82040
+2023-11-04 11:17:00.302051,config/_dev_mcmc.yml,0.79158,0.81481,0.76978
+2023-11-05 09:29:58.268037,config/dev-baseline.yml,0.86252,0.87037,0.86232
+2023-11-05 09:30:20.256690,config/dev-baseline.yml,0.86252,0.87037,0.86232
+2023-11-05 09:38:26.717766,config/dev-baseline.yml,0.86252,0.87037,0.86232
+2023-11-05 09:46:21.215757,config/baseline/balance_catboost_adasyn.yml,0.87981,0.89600,0.88484
+2023-11-05 09:46:23.452416,config/baseline/balance_catboost_baseline.yml,0.87981,0.89600,0.88484
+2023-11-05 09:46:25.701415,config/baseline/balance_catboost_instance-hardness-threshold.yml,0.87981,0.89600,0.88484
+2023-11-05 09:46:27.952763,config/baseline/balance_catboost_kmean-smote.yml,0.87981,0.89600,0.88484
+2023-11-05 09:46:30.207311,config/baseline/balance_catboost_smotenn.yml,0.87981,0.89600,0.88484
+2023-11-05 09:48:25.165436,config/baseline/balance_catboost_adasyn.yml,0.87981,0.89600,0.88484
+2023-11-05 09:48:27.414173,config/baseline/balance_catboost_baseline.yml,0.87981,0.89600,0.88484
+2023-11-05 09:48:29.681811,config/baseline/balance_catboost_instance-hardness-threshold.yml,0.87981,0.89600,0.88484
+2023-11-05 09:48:31.970366,config/baseline/balance_catboost_kmean-smote.yml,0.87981,0.89600,0.88484
+2023-11-05 09:48:34.243475,config/baseline/balance_catboost_smotenn.yml,0.87981,0.89600,0.88484

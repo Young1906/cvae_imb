@@ -28,7 +28,6 @@ def main(config: str):
     # logging config
     logger.info("<START>")
     logger.info(config)
-    
 
     mcmc_config = MCMCConfig(**config["mcmc"])
 
