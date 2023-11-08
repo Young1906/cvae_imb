@@ -94,3 +94,16 @@ class BaselineConfig(BaseModel):
     classifier: str
     score_avg_method: str
     result_pth: str
+
+
+class MCMCExpConfig(BaseModel):
+    sampler_d: str
+    n_samples: int
+    ratio: int 
+    max_iter: int
+    step_size: float
+
+    classifier: str
+    score_avg_method: str
+    result_pth: str
+

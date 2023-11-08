@@ -1,0 +1,15 @@
+mcmc:
+  sampler_d: lr
+  n_samples: 1000
+  ratio: 5
+  max_iter: 50
+  step_size: .25
+  classifier: mlp
+  score_avg_method: weighted 
+  
+  # Path to result file
+  result_pth: results/mcmc_exp.csv
+
+logger:
+  logger_name: mcmc_exp
+  logger_dir: .log

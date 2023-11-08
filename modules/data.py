@@ -3,10 +3,12 @@ Author: Tu T. Do
 Email: tu.dothanh1906@gmail.com
 """
 
+from collections import Counter
 import lightning as L
 import numpy as np
 import pandas as pd
 import torch
+from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
@@ -257,6 +259,23 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
         return DataLoader(
             self.valid, batch_size=self.batch_size, num_workers=self.num_workers
         )
+
+
+def build_synthetic_dataset(n_samples: int, ratio: float, valsplit: float):
+    """
+    n_sample: number of total sample
+    r share of the minority class
+    """
+    X, y = datasets.make_classification(
+            n_samples=n_samples,
+            weights=[ratio / (ratio + 1), 1 /(ratio + 1)],
+            random_state=1)
+    
+    (X_train, X_valid, y_train, y_valid) = train_test_split(
+        X, y, test_size=valsplit, random_state=1, stratify=y
+    )
+
+    return (X_train, y_train), (X_valid, y_valid)
 
 
 def build_datamodules(
