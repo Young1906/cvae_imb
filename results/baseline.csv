@@ -5143,3 +5143,4 @@
 2023-11-05 16:40:25.906462,config/baseline/parkinsons_svm_svm-smote.yml,0.90836,0.89744,0.90027
 2023-11-05 16:40:27.976384,config/baseline/parkinsons_svm_svm-smote.yml,0.89250,0.87179,0.87666
 2023-11-05 16:40:30.052871,config/baseline/parkinsons_svm_svm-smote.yml,0.89250,0.87179,0.87666
+2023-11-08 12:53:09.237454,config/dev-baseline-exp.yml,0.83347,0.83500,0.83403

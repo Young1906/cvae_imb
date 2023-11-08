@@ -1,0 +1,20 @@
+baseline:
+  sampler_name: baseline
+
+  # Synthetic dataset config
+  n_samples: 1000
+  ratio: 2
+
+  # Classifier config
+  classifier: mlp
+
+  # evaluation params
+  score_avg_method: weighted 
+  
+  # Path to result file
+  result_pth: results/baseline-exp.csv
+
+logger:
+  logger_name: baseline-exp 
+  logger_dir: .log
+

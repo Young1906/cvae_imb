@@ -40,6 +40,13 @@ $$
 ## RESULTS 
 ![](rs.png)
 
+### Comparing result at different degree of imbalance
+**Average result over 15 runs**
+![](notebooks/rs-exp-mean.png)
+
+**Best result in 15 runs**
+![](notebooks/rs-exp-max.png)
+
 ## Checklist
 
 ### Dataset

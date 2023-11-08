@@ -107,3 +107,11 @@ class MCMCExpConfig(BaseModel):
     score_avg_method: str
     result_pth: str
 
+
+class BaselineExpConfig(BaseModel):
+    sampler_name: str
+    n_samples: int
+    ratio: int 
+    classifier: str
+    score_avg_method: str
+    result_pth: str

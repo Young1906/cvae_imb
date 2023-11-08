@@ -1,0 +1,10 @@
+baseline:
+  classifier: mlp
+  n_samples: 1000
+  ratio: 3
+  result_pth: results/baseline-exp.csv
+  sampler_name: baseline
+  score_avg_method: weighted
+logger:
+  logger_dir: .log
+  logger_name: baseline-exp
