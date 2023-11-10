@@ -8,5 +8,5 @@ mcmc:
   ratio: 4
   result_pth: results/mcmc_exp.csv
   sampler_d: lr
-  score_avg_method: weighted
+  score_avg_method: binary
   step_size: 0.25

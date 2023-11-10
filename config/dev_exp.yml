@@ -5,7 +5,7 @@ mcmc:
   max_iter: 50
   step_size: .25
   classifier: mlp
-  score_avg_method: weighted 
+  score_avg_method: binary 
   
   # Path to result file
   result_pth: results/mcmc_exp.csv

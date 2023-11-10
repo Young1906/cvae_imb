@@ -261,6 +261,16 @@ class DataModuleFromNumpyArray(L.LightningDataModule):
         )
 
 
+def build_datamodules(
+    name: str, val_split: float, batch_size: int, num_workers: int
+) -> L.LightningDataModule:
+    """
+    Interface to build datamodule from other function
+    """
+
+    return DataModuleFromNumpyArray(name, val_split, batch_size, num_workers)
+
+
 def build_synthetic_dataset(n_samples: int, ratio: float, valsplit: float):
     """
     n_sample: number of total sample
@@ -278,11 +288,7 @@ def build_synthetic_dataset(n_samples: int, ratio: float, valsplit: float):
     return (X_train, y_train), (X_valid, y_valid)
 
 
-def build_datamodules(
-    name: str, val_split: float, batch_size: int, num_workers: int
-) -> L.LightningDataModule:
-    """
-    Interface to build datamodule from other function
-    """
-
-    return DataModuleFromNumpyArray(name, val_split, batch_size, num_workers)
+if __name__ == "__main__":
+    (X, y), (X_test, y_test) = build_synthetic_dataset(1000, 80, .2)
+    print(Counter(y))
+    print(Counter(y_test))
