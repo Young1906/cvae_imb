@@ -1,5 +1,5 @@
 #!/bin/bash
-CONFIGS="config/exp-baseline/*"
+CONFIGS="config/exp-baseline1/*"
 
 for f in $CONFIGS
 do

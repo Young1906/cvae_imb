@@ -1,0 +1,10 @@
+baseline:
+  classifier: knn
+  n_samples: 1000
+  ratio: 90
+  result_pth: results/baseline-exp.csv
+  sampler_name: svm-smote
+  score_avg_method: weighted
+logger:
+  logger_dir: .log
+  logger_name: baseline-exp

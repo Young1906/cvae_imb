@@ -7,7 +7,7 @@ if __name__ == "__main__":
         tmp = yaml.safe_load(f)
 
     ls_clf = ["svm", "lr", "knn", "decision_tree", "mlp", "gbc", "catboost"]
-    ratios = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    ratios = [1, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 
     for clf in ls_clf:
@@ -15,8 +15,12 @@ if __name__ == "__main__":
             tmp["mcmc"]["classifier"] = clf
             tmp["mcmc"]["ratio"]=ratio
 
+            # name and result path
+            tmp["mcmc"]["result_pth"] = "results/mcmc_exp1.csv"
+            tmp["logger"]["logger_name"] = "mcm_exp1"
+
             fn = f"{clf}_{ratio}"
-            with open(f"config/exp/{fn}.yml", "w") as f:
+            with open(f"config/exp1/{fn}.yml", "w") as f:
                 yaml.dump(tmp, f)
 
 

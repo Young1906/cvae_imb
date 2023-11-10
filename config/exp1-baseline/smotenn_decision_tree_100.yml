@@ -1,0 +1,10 @@
+baseline:
+  classifier: decision_tree
+  n_samples: 1000
+  ratio: 100
+  result_pth: results/baseline-exp.csv
+  sampler_name: smotenn
+  score_avg_method: weighted
+logger:
+  logger_dir: .log
+  logger_name: baseline-exp
