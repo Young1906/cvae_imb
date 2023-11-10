@@ -4,7 +4,7 @@ baseline:
   ratio: 10
   result_pth: results/baseline-exp.csv
   sampler_name: instance-hardness-threshold
-  score_avg_method: weighted
+  score_avg_method: binary
 logger:
   logger_dir: .log
   logger_name: baseline-exp

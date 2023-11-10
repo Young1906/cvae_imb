@@ -1,7 +1,10 @@
 #!/bin/bash
-CONFIGS="config/exp-baseline1/*"
+CONFIGS="config/exp-baseline/*"
 
 for f in $CONFIGS
 do
-	python -m modules.baseline.exp -C $f
+	for i in {1..15}
+	do
+		python -m modules.baseline.exp -C $f
+	done
 done

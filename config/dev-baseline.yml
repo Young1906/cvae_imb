@@ -4,7 +4,7 @@ baseline:
   classifier: mlp
 
   # evaluation params
-  score_avg_method: weighted 
+  score_avg_method: binary 
   
   # Path to result file
   result_pth: results/baseline.csv
