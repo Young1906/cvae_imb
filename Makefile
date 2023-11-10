@@ -1,5 +1,5 @@
 dev:
-	python -m modules.baseline.samplers
+	python -m modules.mcmc.exp -C config/dev_exp.yml
 
 # run all experiment
 all: breast_cancer balance parkinsons connectionist ionosphere heart_2cl breast_tissue frogs ecoli
