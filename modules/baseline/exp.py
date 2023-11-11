@@ -29,7 +29,9 @@ def main(config: str):
     # Logger 
     # ++++++++++++++++++++++++++++++++++++++++++++++++++
     logger_config = LoggerConfig(**config["logger"])
-    logger = build_logger(logger_config.logger_name, logger_config.logger_dir)
+    logger = build_logger(name=logger_config.name,
+                          log_path=logger_config.log_path,
+                          telegram_handler=logger_config.telegram_handler)
 
     # logging config
     logger.info("<START>")

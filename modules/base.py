@@ -81,11 +81,9 @@ class MCMCConfig(BaseModel):
 
 
 class LoggerConfig(BaseModel):
-    """
-    Parsing logger config
-    """
-    logger_name: str
-    logger_dir: str
+    name: str
+    log_path: str
+    telegram_handler: int
 
 
 class BaselineConfig(BaseModel):

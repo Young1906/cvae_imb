@@ -6,13 +6,14 @@ Email: tu.dothanh1906@gmail.com
 import logging
 import os
 
+from modules.bot import send_message
+from pydantic import BaseModel
+from modules.base import LoggerConfig
+
 
 # --------------------------------------------------
 # HELPER FUNCTION
 def clean_name(name: str) -> str:
-    """
-    clean name to a file name
-    """
     name = name.lower()
     name = name.split(" ")
     name = "-".join(name)
@@ -21,12 +22,26 @@ def clean_name(name: str) -> str:
 
 
 # --------------------------------------------------
-# HELPER FUNCTION
+# LOGGER
 
-def build_logger(name: str, log_path: str):
-    """
-    Return a logger with name -> logpath
-    """
+
+# Send notification to telegram
+class TelegramHandler(logging.Handler):
+    def __init__(self): super().__init__()
+
+    def emit(self, record):
+        msg = self.format(record)
+        try:
+            send_message(msg)
+
+        except (KeyboardInterrupt, SystemExit):
+            raise
+
+        except Exception as e:
+            self.handleError(e)
+
+
+def build_logger(name: str, log_path: str, telegram_handler: bool):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
@@ -36,11 +51,14 @@ def build_logger(name: str, log_path: str):
 
     # Formater
     formatter = logging.Formatter(
-        "[%(name)s] %(asctime)s :: %(message)s"
+        "%(asctime)s :: [%(name)s] - %(message)s"
     )
 
     # FileHandler
-    fh = logging.FileHandler(f"{log_path}/{clean_name(name)}.txt")
+    fh = logging.FileHandler("{pth}/{fn_name}.txt".format(
+        pth=log_path,
+        fn_name=clean_name(name)
+    ))
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
     logger.addHandler(fh)
@@ -50,5 +68,12 @@ def build_logger(name: str, log_path: str):
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
     logger.addHandler(sh)
+
+    # TelegramHandler
+    if telegram_handler == 1:
+        th = TelegramHandler()
+        th.setFormatter(formatter)
+        th.setLevel(logging.INFO)
+        logger.addHandler(th)
 
     return logger

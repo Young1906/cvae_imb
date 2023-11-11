@@ -25,6 +25,10 @@ if __name__ == "__main__":
                 tmp["baseline"]["sampler_name"] = sampler 
                 tmp["baseline"]["score_avg_method"] = "macro"
 
+                tmp["logger"]["name"] = "mcmc"
+                tmp["logger"]["logger_path"] = ".log"
+                tmp["logger"]["telegram_handler"] = True
+
                 fn = f"{ds}_{clf}_{sampler}"
 
                 with open(f"config/baseline/{fn}.yml", "w") as f:

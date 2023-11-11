@@ -10,5 +10,6 @@ mcmc:
   result_pth: results/mcmc.csv
 
 logger:
-  logger_name: mcmc 
-  logger_dir: .log
+  name: mcmc 
+  logger_path: .log
+  telegram_handler : true

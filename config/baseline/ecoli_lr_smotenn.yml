@@ -7,3 +7,6 @@ baseline:
 logger:
   logger_dir: .log
   logger_name: baseline
+  logger_path: .log
+  name: mcmc
+  telegram_handler: true

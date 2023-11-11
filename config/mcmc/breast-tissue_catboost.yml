@@ -1,6 +1,7 @@
 logger:
-  logger_dir: .log
-  logger_name: mcmc
+  logger_path: .log
+  name: mcmc
+  telegram_handler: true
 mcmc:
   classifier: catboost
   dataset: breast-tissue

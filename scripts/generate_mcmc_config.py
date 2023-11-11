@@ -18,6 +18,10 @@ if __name__ == "__main__":
             tmp["mcmc"]["classifier"] = clf
             tmp["mcmc"]["score_avg_method"] = "macro"
 
+            tmp["logger"]["name"] = "mcmc"
+            tmp["logger"]["logger_path"] = ".log"
+            tmp["logger"]["telegram_handler"] = True
+
             fn = f"{ds}_{clf}"
             with open(f"config/mcmc/{fn}.yml", "w") as f:
                 yaml.dump(tmp, f)
