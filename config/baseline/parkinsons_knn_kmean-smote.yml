@@ -3,7 +3,7 @@ baseline:
   dataset: parkinsons
   result_pth: results/baseline.csv
   sampler_name: kmean-smote
-  score_avg_method: weighted
+  score_avg_method: macro
 logger:
   logger_dir: .log
   logger_name: baseline

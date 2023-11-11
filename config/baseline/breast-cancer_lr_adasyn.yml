@@ -3,7 +3,7 @@ baseline:
   dataset: breast-cancer
   result_pth: results/baseline.csv
   sampler_name: adasyn
-  score_avg_method: weighted
+  score_avg_method: macro
 logger:
   logger_dir: .log
   logger_name: baseline
