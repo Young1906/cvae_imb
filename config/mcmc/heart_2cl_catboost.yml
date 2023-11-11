@@ -7,5 +7,5 @@ mcmc:
   max_iter: 50
   result_pth: results/mcmc.csv
   sampler_d: lr
-  score_avg_method: weighted
+  score_avg_method: macro
   step_size: 0.25

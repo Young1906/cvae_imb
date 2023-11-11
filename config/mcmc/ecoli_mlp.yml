@@ -2,8 +2,8 @@ logger:
   logger_dir: .log
   logger_name: mcmc
 mcmc:
-  classifier: lr
-  dataset: ionosphere
+  classifier: mlp
+  dataset: ecoli
   max_iter: 50
   result_pth: results/mcmc.csv
   sampler_d: lr

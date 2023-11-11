@@ -16,6 +16,7 @@ if __name__ == "__main__":
         for clf in ls_clf:
             tmp["mcmc"]["dataset"] = ds
             tmp["mcmc"]["classifier"] = clf
+            tmp["mcmc"]["score_avg_method"] = "macro"
 
             fn = f"{ds}_{clf}"
             with open(f"config/mcmc/{fn}.yml", "w") as f:
