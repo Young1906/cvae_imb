@@ -1,4 +1,5 @@
 logger:
+  log_path: .log
   logger_path: .log
   name: mcmc
   telegram_handler: true

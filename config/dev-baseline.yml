@@ -10,6 +10,7 @@ baseline:
   result_pth: results/baseline.csv
 
 logger:
-  logger_name: baseline 
-  logger_dir: .log
+  name: baseline 
+  log_path: .log
+  telegram_handler: false
 

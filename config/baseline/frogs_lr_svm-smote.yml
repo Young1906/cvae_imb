@@ -5,8 +5,6 @@ baseline:
   sampler_name: svm-smote
   score_avg_method: macro
 logger:
-  logger_dir: .log
-  logger_name: baseline
-  logger_path: .log
+  log_path: .log
   name: mcmc
   telegram_handler: true

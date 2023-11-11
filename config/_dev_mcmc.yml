@@ -11,5 +11,5 @@ mcmc:
 
 logger:
   name: mcmc 
-  logger_path: .log
+  log_path: .log
   telegram_handler : true

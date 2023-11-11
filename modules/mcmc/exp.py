@@ -26,8 +26,8 @@ def main(config: str):
                           log_path=logger_config.log_path,
                           telegram_handler=logger_config.telegram_handler)
 
-    logger.info("<START>")
-    logger.info(config)
+    logger.debug("<START>")
+    logger.debug(config)
 
     exp_config = MCMCExpConfig(**config["mcmc"])
     
@@ -53,9 +53,9 @@ def main(config: str):
     p, r, f = evaluate(y_test, y_pred, exp_config.score_avg_method)
 
     # Logging result
-    logger.info(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
-    logger.info("<END>")
-    logger.info("-" * 80)
+    logger.debug(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
+    logger.debug("<END>")
+    logger.debug("-" * 80)
 
     # Logging to result
     with open(exp_config.result_pth, "a") as fn:
