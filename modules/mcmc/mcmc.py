@@ -132,7 +132,7 @@ class MCMCOverSampling:
             X_syn, y_syn = \
                     self.__wrapMCMC(self.best_d, f, q, X_train, y_train)
             d = self.__fit_d(d, X_syn, y_syn)
-            f1 = f1_score(y_valid, d.predict(X_valid), average="binary")
+            f1 = f1_score(y_valid, d.predict(X_valid), average="macro")
 
             if f1 > self.best_f1:
                 self.best_f1 = f1

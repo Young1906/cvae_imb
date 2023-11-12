@@ -1,3 +1,10 @@
+run_all:
+	scripts/run.sh
+	scripts/run_baseline.sh
+	python -m modules.noti --msg "Done all exp, commit & shutting down"
+	git add . && git commit -m "Update Exp Result"
+	init 0
+
 dev:
 	python -m modules.mcmc.exp -C config/dev_exp.yml
 
