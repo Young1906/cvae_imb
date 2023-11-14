@@ -25,9 +25,9 @@ if __name__ == "__main__":
                 tmp["baseline"]["sampler_name"] = sampler 
                 tmp["baseline"]["score_avg_method"] = "macro"
 
-                tmp["logger"]["name"] = "mcmc"
+                tmp["logger"]["name"] = "baseline"
                 tmp["logger"]["log_path"] = ".log"
-                tmp["logger"]["telegram_handler"] = True
+                tmp["logger"]["telegram_handler"] = False
 
                 fn = f"{ds}_{clf}_{sampler}"
 

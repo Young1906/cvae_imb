@@ -6,5 +6,5 @@ baseline:
   score_avg_method: macro
 logger:
   log_path: .log
-  name: baseline 
-  telegram_handler: true
+  name: baseline
+  telegram_handler: false

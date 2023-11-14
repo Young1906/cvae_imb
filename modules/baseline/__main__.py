@@ -34,8 +34,8 @@ def main(config: str):
                           telegram_handler=logger_config.telegram_handler)
 
     # logging config
-    logger.info("<START>")
-    logger.info(config)
+    logger.debug("<START>")
+    logger.debug(config)
     
 
     # Baseline method
@@ -68,8 +68,8 @@ def main(config: str):
 
     # Logging result
     # -------------------------------------------------- 
-    logger.info(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
-    logger.info("<END>")
+    logger.debug(f"Precision: {p:.5f}, Recall: {r:.5f}, F1: {f:.5f}")
+    logger.debug("<END>")
     logger.info("-" * 80)
 
     # Logging to result
