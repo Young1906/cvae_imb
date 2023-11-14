@@ -55,6 +55,7 @@ class MCMCOverSampling:
         # Decision function
         _d = lambda x: d.predict_proba(np.expand_dims(x, 0))[0, target] # p(y = target | x)
 
+
         # Sample
         samples = []
         counter = 0
@@ -68,7 +69,7 @@ class MCMCOverSampling:
 
             u = np.random.uniform()
 
-            if u < H:
+            if u < H and (_d(x) == d.predict_proba(np.array([x],)).max()):
                 samples.append(x)
                 x0 = x
                 counter +=1
@@ -172,7 +173,7 @@ if __name__ == "__main__":
 
     omc = MCMCOverSampling(
             lambda: build_classifier("catboost"),
-            max_iter= 100, step_size=.25)
+            max_iter= 5, step_size=.25)
 
     (X, y), (X_test, y_test), le = _build_Xy("breast-tissue")
 

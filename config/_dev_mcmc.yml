@@ -1,15 +1,12 @@
-mcmc:
-  dataset: heart_2cl
-  sampler_d: lr
-  max_iter: 50
-  step_size: .25
-  classifier: mlp
-  score_avg_method: macro 
-  
-  # Path to result file
-  result_pth: results/mcmc.csv
-
 logger:
-  name: mcmc 
   log_path: .log
-  telegram_handler : true
+  name: mcmc
+  telegram_handler: true
+mcmc:
+  classifier: lr
+  dataset: breast-tissue
+  max_iter: 10
+  result_pth: results/mcmc.csv
+  sampler_d: lr
+  score_avg_method: macro
+  step_size: 0.25
