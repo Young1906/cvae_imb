@@ -1,11 +1,11 @@
 logger:
   log_path: .log
   name: mcmc
-  telegram_handler: true
+  telegram_handler: false
 mcmc:
   classifier: gbc
   dataset: heart_2cl
-  max_iter: 50
+  max_iter: 10
   result_pth: results/mcmc.csv
   sampler_d: lr
   score_avg_method: macro

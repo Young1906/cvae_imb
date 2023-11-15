@@ -59,6 +59,8 @@ class MCMCOverSampling:
         # Sample
         samples = []
         counter = 0
+        fail_counter = 0
+
         while True:
             # Proposal
             x = q(x0)
@@ -69,14 +71,26 @@ class MCMCOverSampling:
 
             u = np.random.uniform()
 
-            if u < H and (_d(x) == d.predict_proba(np.array([x],)).max()):
-                samples.append(x)
-                x0 = x
-                counter +=1
+            if u < H:
+                if _d(x) == d.predict_proba(np.array([x],)).max():
+                    samples.append(x)
+                    x0 = x
+                    counter +=1
+                    fail_counter = 0
+
+                else:
+                    fail_counter += 1
 
             if counter >= (n_samples + burn_in) :
                 samples = samples[burn_in:]
                 return np.stack(samples)
+
+            if fail_counter > 50:
+                # restart the chain from a random in X
+                idx = np.random.choice(N)
+                x0 = Xt[idx,:]
+                fail_counter = 0
+                
 
     @staticmethod
     @enable_stochastic_process
