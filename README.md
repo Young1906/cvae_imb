@@ -34,6 +34,46 @@ x \sim \mathcal{N}(.; \mu, \Sigma)
 $$
 
 
+
+
+### Comparing result at different degree of imbalance
+**Average result over 15 runs**
+![](notebooks/rs-exp-mean.png)
+
+**Best result in 15 runs**
+![](notebooks/rs-exp-max.png)
+
+## Checklist
+
+### Dataset
+
+- [x] Breast Cancer
+- [x] Frogs MFCCs
+- [x] Breast Tissue
+- [x] Connectionist BenchMark
+- [x] Ionosphere
+- [x] Parkinsons
+- [ ] Heart Training Subset ( Heart2CL? )
+- [x] Balance
+
+Other (not included in Hoang's repo)
+
+- [x] Ecoli
+
+### Classifier
+
+- [x] SMV
+- [x] Logistic Regression
+- [x] MLP
+
+Other:
+
+- [x] KNN
+- [x] Decision Tree
+- [x] Gradient Boosting Classifier
+- [x] CatBoost
+
+
 ## Conditional VAE
 
 
@@ -103,44 +143,6 @@ $$
 | parkinsons    | lr            | 0.779198 |    0.68689 |                      0.711359 |      0.698446 | 0.716263 |  0.723367 |    0.753617 |
 | parkinsons    | mlp           | 0.893409 |    0.84274 |                      0.715046 |      0.884208 | 0.809687 |  0.828793 |    0.918301 |
 | parkinsons    | svm           | 0.824647 |    0.79365 |                      0.708722 |      0.79365  | 0.791681 |  0.790744 |    0.831535 |
-
-
-### Comparing result at different degree of imbalance
-**Average result over 15 runs**
-![](notebooks/rs-exp-mean.png)
-
-**Best result in 15 runs**
-![](notebooks/rs-exp-max.png)
-
-## Checklist
-
-### Dataset
-
-- [x] Breast Cancer
-- [x] Frogs MFCCs
-- [x] Breast Tissue
-- [x] Connectionist BenchMark
-- [x] Ionosphere
-- [x] Parkinsons
-- [ ] Heart Training Subset ( Heart2CL? )
-- [x] Balance
-
-Other (not included in Hoang's repo)
-
-- [x] Ecoli
-
-### Classifier
-
-- [x] SMV
-- [x] Logistic Regression
-- [x] MLP
-
-Other:
-
-- [x] KNN
-- [x] Decision Tree
-- [x] Gradient Boosting Classifier
-- [x] CatBoost
 
 
 ## [IMPORTANT] Experiment procedure
